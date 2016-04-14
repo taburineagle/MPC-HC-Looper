@@ -1,0 +1,30 @@
+; Default fonts for the Default saving/restoring dialog
+GUICtrlSetFont($Which, 10, 800, 0, "Segoe UI")
+
+GUICtrlSetFont($DS1, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($DS2, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($DS3, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($DS4, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($DS5, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($DS6, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($DS7, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($DS8, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($DS9, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($DS10, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($DS11, 10, 400, 0, "Segoe UI")
+
+GUICtrlSetFont($defaultCancelButon, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($defaultSaveButton, 10, 400, 0, "Segoe UI")
+
+; Default tick options for the Default saving/restoring dialog
+;~ GUICtrlSetState($DS1, $GUI_CHECKED)
+;~ GUICtrlSetState($DS2, $GUI_CHECKED)
+;~ GUICtrlSetState($DS3, $GUI_CHECKED)
+;~ GUICtrlSetState($DS4, $GUI_CHECKED)
+;~ GUICtrlSetState($DS5, $GUI_CHECKED)
+;~ GUICtrlSetState($DS6, $GUI_CHECKED)
+;~ GUICtrlSetState($DS7, $GUI_CHECKED)
+;~ GUICtrlSetState($DS8, $GUI_CHECKED)
+GUICtrlSetState($DS9, $GUI_CHECKED)
+GUICtrlSetState($DS10, $GUI_CHECKED)
+GUICtrlSetState($DS11, $GUI_CHECKED)
