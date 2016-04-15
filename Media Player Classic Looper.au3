@@ -2,7 +2,7 @@
 #AutoIt3Wrapper_Icon=MPC Icons.ico
 #AutoIt3Wrapper_Res_Comment=MPC-HC Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=Media Player Classic Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=4.12.16.3
+#AutoIt3Wrapper_Res_Fileversion=4.15.16.3
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=2014-2016 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
@@ -220,8 +220,8 @@ $listAddButton = GUICtrlCreateButton("Add", 305, 445, 57, 25) ; GUI Element 43
 $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Element 44
 
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
-$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [04-10-16] RC", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
-$progInfo = GUICtrlCreateLabel("(C) 2014-16 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
+$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [04-15-16]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-16 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
 GUICtrlSetImage(-1, "C:\Windows\System32\shell32.dll", -91)
