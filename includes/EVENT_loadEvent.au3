@@ -39,6 +39,7 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 			EndIf
 		EndIf
 
+		MakeMPCActive() ; make MPC-HC the active program (so it can respond to its own keyboard shortcuts)
 		__MPC_send_message($ghnd_MPC_handle, $CMD_PLAY, "") ; forces MPC to pause
 
 		$currentPlayingEvent = $selectedItem

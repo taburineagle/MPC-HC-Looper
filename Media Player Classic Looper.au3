@@ -286,6 +286,8 @@ GUICtrlSetOnEvent($listSaveButton, "saveList")
 GUICtrlSetOnEvent($optionsButton, "loadOptions")
 GUICtrlSetOnEvent($goToDirectoryButton, "openPathtoFile")
 
+GUICtrlSetOnEvent($progInfo, "loadURL") ; load the Gulls Wing Media website when you click on that bit of text on the main window
+
 #include 'includes\custom\MainGUIFonts.au3' ; Sets the fonts and colors for all of the buttons in the main window of MPC-HC Looper
 #include 'includes\custom\Main-tooltips.au3' ; Adds tooltips to each of the main window buttons in MPC-HC Looper
 
@@ -438,6 +440,7 @@ WEnd
 #include 'includes\GUI_maximizeWindow.au3' ; maximizes the window to 3 predetermined sizes
 #include 'includes\GUI_minimizeWindow.au3' ; minimizes the window
 #include 'includes\GUI_restoreWindow.au3' ; makes the window normal size again
+#include 'includes\GUI_loadURL.au3' ; load the Gull's Wing Media website when you click on that link
 
 #include 'includes\MAIN_Uninitialize.au3' ; quitting procedure
 
