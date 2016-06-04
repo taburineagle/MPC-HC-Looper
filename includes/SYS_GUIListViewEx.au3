@@ -1388,6 +1388,7 @@ Func _GUIListViewEx_WM_NOTIFY_Handler($hWnd, $iMsg, $wParam, $lParam)
 						Local $aLVSortState = $aGLVEx_Data[$iLV_Index][4]
 						; Sort column - get column from from struct
 						_GUICtrlListView_SimpleSort($hGLVEx_SrcHandle, $aLVSortState, $iCol)
+						setModified() ; if you sort the list, mark the current session as modified (ZAG addition)
 ;~ 						_GUICtrlListView_SortItems($hGLVEx_SrcHandle, $iCol)
 						; Store new ListView sort state array
 						$aGLVEx_Data[$iLV_Index][4] = $aLVSortState
