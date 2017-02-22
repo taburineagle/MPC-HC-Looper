@@ -1,12 +1,16 @@
-Func trimInPointDec() ; trim the IN point back
+Func trimInPointDec($trimAmount = 0) ; trim the IN point back
 	GUICtrlSetBkColor($inDecButton, 0xb9b9b9)
 	Local $hDLL = DllOpen("user32.dll")
 
 	$isDone = False
 	$firstRun = True
 
+	If $trimAmount = 0 Then
+		$trimAmount = $loopSlipLength
+	EndIf
+
 	While $isDone = False
-		$newInPoint = NumberToTimeString(TimeStringToNumber(GUICtrlRead($inTF)) - $loopSlipLength)
+		$newInPoint = NumberToTimeString(TimeStringToNumber(GUICtrlRead($inTF)) - $trimAmount)
 
 		If TimeStringToNumber($newInPoint) > 0 Then
 			GUICtrlSetData($inTF, $newInPoint)

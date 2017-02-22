@@ -11,13 +11,23 @@ Func hotKeyPressed() ; when you press a hotkey
 		Case "^x"
 			If getMode() Then clearInOutPoint()
 		Case "["
-			If getMode() Then trimInPointDec()
+			If getMode() Then trimInPointDec() ; if you hold down [ without SHIFT
 		Case "]"
-			If getMode() Then trimInPointInc()
+			If getMode() Then trimInPointInc() ; if you hold down ] without SHIFT
 		Case ";"
-			If getMode() Then trimOutPointDec()
+			If getMode() Then trimOutPointDec() ; if you hold down ; without SHIFT
 		Case "'"
-			If getMode() Then trimOutPointInc()
+			If getMode() Then trimOutPointInc() ; if you hold down ' without SHIFT
+
+		Case "+["
+			If getMode() Then trimInPointDec(0.050) ; if you hold down [ WITH SHIFT
+		Case "+]"
+			If getMode() Then trimInPointInc(0.050) ; if you hold down ] WITH SHIFT
+		Case "+;"
+			If getMode() Then trimOutPointDec(0.050) ; if you hold down ; WITH SHIFT
+		Case "+'"
+			If getMode() Then trimOutPointInc(0.050) ; if you hold down ' WITH SHIFT
+
 		Case "^n"
 			If getMode() Then addEvent()
 		Case "{DEL}"

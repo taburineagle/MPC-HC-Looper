@@ -1,12 +1,16 @@
-Func trimInPointInc() ; trim the IN point forward
+Func trimInPointInc($trimAmount = 0) ; trim the IN point forward
 	GUICtrlSetBkColor($inIncButton, 0xb9b9b9)
 	Local $hDLL = DllOpen("user32.dll")
 
 	$isDone = False
 	$firstRun = True
 
+	If $trimAmount = 0 Then
+		$trimAmount = $loopSlipLength
+	EndIf
+
 	While $isDone = False
-		$newInPoint = NumberToTimeString(TimeStringToNumber(GUICtrlRead($inTF)) + $loopSlipLength)
+		$newInPoint = NumberToTimeString(TimeStringToNumber(GUICtrlRead($inTF)) + $trimAmount)
 		GUICtrlSetData($inTF, $newInPoint)
 
 		clearOSDInfo()

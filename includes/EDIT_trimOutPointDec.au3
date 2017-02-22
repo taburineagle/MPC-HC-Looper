@@ -1,12 +1,16 @@
-Func trimOutPointDec() ; trim the OUT point back
+Func trimOutPointDec($trimAmount = 0) ; trim the OUT point back
 	GUICtrlSetBkColor($outDecButton, 0xb9b9b9)
 	Local $hDLL = DllOpen("user32.dll")
 
 	$isDone = False
 	$firstRun = True
 
+	If $trimAmount = 0 Then
+		$trimAmount = $loopSlipLength
+	EndIf
+
 	While $isDone = False
-		$newOutPoint = NumberToTimeString(TimeStringToNumber(GUICtrlRead($outTF)) - $loopSlipLength)
+		$newOutPoint = NumberToTimeString(TimeStringToNumber(GUICtrlRead($outTF)) - $trimAmount)
 
 		If TimeStringToNumber($newOutPoint) > 0 Then
 			GUICtrlSetData($outTF, $newOutPoint)
