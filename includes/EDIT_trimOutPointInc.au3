@@ -1,3 +1,7 @@
+Func trimOutPointInc_Button()
+	trimOutPointInc()
+EndFunc
+
 Func trimOutPointInc($trimAmount = 0) ; trim the OUT point forward
 	GUICtrlSetBkColor($outIncButton, 0xb9b9b9)
 	Local $hDLL = DllOpen("user32.dll")

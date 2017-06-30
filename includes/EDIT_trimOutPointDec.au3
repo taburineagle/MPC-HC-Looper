@@ -1,3 +1,7 @@
+Func trimOutPointDec_Button()
+	trimOutPointDec()
+EndFunc
+
 Func trimOutPointDec($trimAmount = 0) ; trim the OUT point back
 	GUICtrlSetBkColor($outDecButton, 0xb9b9b9)
 	Local $hDLL = DllOpen("user32.dll")
