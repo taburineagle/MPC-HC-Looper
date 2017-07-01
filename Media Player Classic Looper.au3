@@ -316,6 +316,8 @@ _GUIListViewEx_MsgRegister() ; for Dragging and Dropping items
 #include 'includes\SYS_WM_GETMINMAXINFO.au3' ; forces the window to stay the same width
 #include 'includes\DEFAULTS_loadDefaults.au3' ; all of the default loading code
 
+#include 'includes\GUI_contextMenu.au3' ; Adds context menu to events list
+
 ; **************************************************************************
 ; ****** MEDIA PLAYER CLASSIC TIES TO THIS PROGRAM *************************
 ; **************************************************************************
