@@ -519,7 +519,7 @@ WEnd
 
 #include 'includes\EVENT_addEvent.au3' ; add an event to the event list
 #include 'includes\EVENT_modifyEvent.au3' ; modify an event from the event list
-#include 'includes\EVENT_deleteEvent.au3' ; delete an event from the event list
+#include 'includes\EVENT_deleteEvent.au3' ; deleting an event (or multiple events) from the event list
 #include 'includes\EVENT_clearEvents.au3' ; delete ALL events from the event list
 
 #include 'includes\EVENT_loadPrevNextEvent.au3' ; what happens when you click on the previous or next event buttons

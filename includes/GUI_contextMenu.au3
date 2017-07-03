@@ -7,11 +7,11 @@ Global $contextMenu_combineEvents = 0
 
 ; Handle WM_CONTEXTMENU messages
 Func WM_CONTEXTMENU($hWnd, $iMsg, $wParam, $lParam)
-    #forceref $hWnd, $iMsg, $lParam
+	#forceref $hWnd, $iMsg, $lParam
 
 	$currentlySelected = _GUICtrlListView_GetSelectedIndices($eventList, 1)
 
-	If $currentlySelected[0] <> 0 Then
+	If $wParam = ControlGetHandle($mainWindow, "", $eventList) And $currentlySelected[0] <> 0 Then
 		Local $contextMenu
 
 		$contextMenu = _GUICtrlMenu_CreatePopup()
@@ -25,14 +25,14 @@ Func WM_CONTEXTMENU($hWnd, $iMsg, $wParam, $lParam)
 EndFunc
 
 Func WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)
-    #forceref $hWnd, $iMsg, $lParam
+	#forceref $hWnd, $iMsg, $lParam
 
     Switch $wParam
 		Case $contextMenu_combineEvents
 			$currentlySelected = _GUICtrlListView_GetSelectedIndices($eventList, 1)
 
 			If $currentlySelected[0] <> 0 Then
-				$newName = "[Events " & $currentlySelected[1] + 1 & "-" & $currentlySelected[UBound($currentlySelected) - 1] + 1 & "]"
+				$newName = "[Events " & _GUICtrlListView_GetItemText($eventList, $currentlySelected[1], 0) & "-" & _GUICtrlListView_GetItemText($eventList, $currentlySelected[UBound($currentlySelected) - 1], 0) &"]"
 				$newINPoint =  _GUICtrlListView_GetItemText($eventList, $currentlySelected[1], 2)
 				$newOUTPoint = _GUICtrlListView_GetItemText($eventList, $currentlySelected[UBound($currentlySelected) - 1], 3)
 				$newDur = NumberToTimeString(getEventDur($newINPoint, $newOUTPoint))

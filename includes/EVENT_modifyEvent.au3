@@ -34,3 +34,13 @@ Func modifyEvent() ; modify an event in the event list
 
 	initializeEventChange($GUI_ENABLE)
 EndFunc
+
+#cs
+modify event function - need
+	- position in list
+	- name of new event
+	- IN and OUT point of new event
+	- figure out duration based on that information
+	- and event(s) to delete, more if you're combining events
+	- then the move up thing (If $currentPlayingEvent =) stuff
+#ce
