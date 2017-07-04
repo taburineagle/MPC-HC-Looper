@@ -17,8 +17,8 @@ Func WM_CONTEXTMENU($hWnd, $iMsg, $wParam, $lParam)
 		$contextMenu = _GUICtrlMenu_CreatePopup()
 		_GUICtrlMenu_AddMenuItem($contextMenu, "Combine these events", $contextMenu_combineEvents)
 
-		_GUICtrlMenu_TrackPopupMenu($contextMenu, $mainWindow)
-		_GUICtrlMenu_DestroyMenu($contextMenu)
+		_GUICtrlMenu_TrackPopupMenu($contextMenu, $mainWindow) ; show the popup menu
+		_GUICtrlMenu_DestroyMenu($contextMenu) ; destroy the popup menu
 	EndIf
 
 	Return True
@@ -38,20 +38,16 @@ Func WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)
 				$newDur = NumberToTimeString(getEventDur($newINPoint, $newOUTPoint))
 				$currentFile = _GUICtrlListView_GetItemText($eventList, $currentlySelected[1], 5)
 
-				MsgBox(0, "Combine events?", "Are you sure you want to combine these " & $currentlySelected[0] & " events into one event?" & @CRLF & @CRLF & _
-				"New Name: " & $newName & @CRLF & _
+				$combineEvents = MsgBox(4, "Combine events?", "Are you sure you want to combine these " & $currentlySelected[0] & " events into one event?" & @CRLF & @CRLF & _
+				"New Name: " & $newName & @CRLF & @CRLF & _
 				"New IN Point: " & $newINPoint & @CRLF & _
-				"New OUT Point: " & $newOUTPoint & @CRLF & _
+				"New OUT Point: " & $newOUTPoint & @CRLF & @CRLF & _
 				"New Duration: " & $newDur)
 
-				_GUICtrlListView_SetItemSelected($eventList, -1, false, false) ; for Dragging and Dropping items
-
-				For $i = 1 to UBound($currentlySelected) - 1
-					_GUICtrlListView_SetItemSelected($eventList, $currentlySelected[$i], True, True) ; for Dragging and Dropping items
-				Next
-
-				_GUIListViewEx_Delete()
-				_GUIListViewEx_Insert($currentlySelected[1] + 1 & "|" & $newName & "|" & $newINPoint & "|" & $newOUTPoint & "|" & $newDur & "|" & $currentFile)
+				If $combineEvents = 6 Then ; you clicked on "Yes" to combining files
+					;          The current event's ID  The event's proper order in the event list (the leftmost column)    Name      IN Point     Out Point     Filename      Event to start delete  Event to stop delete (the last item of the array)
+					modifyEvent($currentlySelected[1], _GUICtrlListView_GetItemText($eventList, $currentlySelected[1], 0), $newName, $newINPoint, $newOUTPoint, $currentFile, $currentlySelected[1], $currentlySelected[UBound($currentlySelected) -1])
+				EndIf
 			EndIf
 	EndSwitch
 EndFunc

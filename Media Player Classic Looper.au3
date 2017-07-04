@@ -279,7 +279,7 @@ GUICtrlSetOnEvent($searchEventButton, "searchEventList")
 GUICtrlSetOnEvent($searchClearButton, "searchEventListRestore")
 
 GUICtrlSetOnEvent($listAddButton, "addEvent")
-GUICtrlSetOnEvent($listModifyButton, "modifyEvent")
+GUICtrlSetOnEvent($listModifyButton, "modifyEventPrompt")
 GUICtrlSetOnEvent($listDeleteButton, "deleteEvent")
 GUICtrlSetOnEvent($listClearButton, "clearEvents")
 
@@ -518,7 +518,8 @@ WEnd
 #include 'includes\EVENT_initializeEventChange.au3' ; change specific GUI items if you're in the middle of adding or modifying an event
 
 #include 'includes\EVENT_addEvent.au3' ; add an event to the event list
-#include 'includes\EVENT_modifyEvent.au3' ; modify an event from the event list
+#include 'includes\EVENT_modifyEventPrompt.au3' ; prompt to modify an event from the event list
+#include 'includes\EVENT_modifyEvent.au3' ; modify an event (and delete event(s) if necessary) from the event list
 #include 'includes\EVENT_deleteEvent.au3' ; deleting an event (or multiple events) from the event list
 #include 'includes\EVENT_clearEvents.au3' ; delete ALL events from the event list
 
