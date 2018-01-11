@@ -11,14 +11,18 @@ Func WM_CONTEXTMENU($hWnd, $iMsg, $wParam, $lParam)
 
 	$currentlySelected = _GUICtrlListView_GetSelectedIndices($eventList, 1)
 
-	If $wParam = ControlGetHandle($mainWindow, "", $eventList) And $currentlySelected[0] <> 0 Then
-		Local $contextMenu
+	If $wParam = ControlGetHandle($mainWindow, "", $eventList) And $currentlySelected[0] > 1 Then
+		If $currentlySearching = 0 Then
+			Local $contextMenu
 
-		$contextMenu = _GUICtrlMenu_CreatePopup()
-		_GUICtrlMenu_AddMenuItem($contextMenu, "Combine these events", $contextMenu_combineEvents)
+			$contextMenu = _GUICtrlMenu_CreatePopup()
+			_GUICtrlMenu_AddMenuItem($contextMenu, "Combine these events", $contextMenu_combineEvents)
 
-		_GUICtrlMenu_TrackPopupMenu($contextMenu, $mainWindow) ; show the popup menu
-		_GUICtrlMenu_DestroyMenu($contextMenu) ; destroy the popup menu
+			_GUICtrlMenu_TrackPopupMenu($contextMenu, $mainWindow) ; show the popup menu
+			_GUICtrlMenu_DestroyMenu($contextMenu) ; destroy the popup menu
+		Else
+			MsgBox(48, "In Search Mode!", "You can't combine multiple events when you're in search mode." & @CRLF & "Clear the search bar and try again.");
+		EndIf
 	EndIf
 
 	Return True

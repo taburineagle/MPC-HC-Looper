@@ -1,10 +1,11 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=MPC Icons.ico
+#AutoIt3Wrapper_Compression=0
 #AutoIt3Wrapper_Res_Comment=MPC-HC Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=Media Player Classic Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=7.10.17.2
+#AutoIt3Wrapper_Res_Fileversion=1.11.18.2
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
-#AutoIt3Wrapper_Res_LegalCopyright=2014-2017 Zach Glenwright
+#AutoIt3Wrapper_Res_LegalCopyright=2014-2018 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
 #AutoIt3Wrapper_Res_Icon_Add=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\MPCD.ico
 #AutoIt3Wrapper_Run_Au3Stripper=y
@@ -12,7 +13,7 @@
 
 ; **************************************************************************
 ; ******* Media Player Classic Looper! *************************************
-; ******* (C) 2014-16 Zach Glenwright **************************************
+; ******* (C) 2014-18 Zach Glenwright **************************************
 ; **************************************************************************
 ; ******* http://www.gullswingmedia.com ************************************
 ; **************************************************************************
@@ -31,7 +32,6 @@
 #include <GuiListView.au3>
 #include <SendMessage.au3>
 #include <WinAPI.au3>
-#include <WinAPIEx.au3>
 #include <File.au3>
 #include <SliderConstants.au3>
 
@@ -39,7 +39,6 @@
 #include 'includes\SYS_MPC-HC-API.au3' ; All of the API ties to Media Player Classic (modularized because I shouldn't have to change it)
 #include 'includes\SYS_ShellFile.au3' ; Associating the filetype with MPC-HC Looper
 #include 'includes\SYS_GUIListViewEx.au3' ; The new listview control (that lets you drag, drop, etc.)
-#include 'includes\SYS_Remove_CS_DBLCLKS.au3' ; code snippet by rover 2k9 that stops double clicking labels (so it doesn't copy to clipboard)
 
 ; **************************************************************************
 ; ******* GLOBAL DECLARATIONS **********************************************
@@ -170,7 +169,18 @@ $mainWindow = GUICreate("MPC-HC Looper!", (404 + 30), 538, (@DesktopWidth - (429
 
 ; main topmost GUI controls
 $inButton = GUICtrlCreateLabel("IN", 38, 34, 34, 25, BitOR($SS_CENTER, $SS_CENTERIMAGE), $WS_EX_CLIENTEDGE) ; GUI Element 3
+
+; ==================================================================
+; Procedure to fix the "copy to clipboard" issue when clicking on labels
+; using code snippet by rover 2k9 that stops double clicking labels (so it doesn't copy to clipboard)
+; you have to create a control of a specific type first (which is why this snippet is after the IN
+; button is created) before changing the declaration
+; ==================================================================
+#include <WinAPIEx.au3>
+#include 'includes\SYS_Remove_CS_DBLCLKS.au3'
 _Remove_CS_DBLCLKS(-1) ; remove double-click ability from static controls (but not from buttons or list views!)
+; ==================================================================
+
 $inTF = GUICtrlCreateInput("", 8, 64, 124, 25, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER)) ; GUI Element 4
 $inDecButton = GUICtrlCreateLabel("-", 8, 34, 27, 25, BitOR($SS_CENTER, $SS_CENTERIMAGE), $WS_EX_CLIENTEDGE)
 $inIncButton = GUICtrlCreateLabel("+", 104, 34, 27, 25, BitOR($SS_CENTER, $SS_CENTERIMAGE), $WS_EX_CLIENTEDGE) ; GUI Element 6
@@ -223,8 +233,8 @@ $listAddButton = GUICtrlCreateButton("Add", 305, 445, 57, 25) ; GUI Element 43
 $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Element 44
 
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
-$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [07-10-17]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
-$progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-17 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
+$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [01-11-18]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-18 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
 GUICtrlSetImage(-1, "C:\Windows\System32\shell32.dll", -91)
