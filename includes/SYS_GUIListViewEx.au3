@@ -124,6 +124,7 @@ Global $sGLVEx_SepChar = Opt("GUIDataSeparatorChar")
 ; Example........: Yes
 ;=====================================================================================================================
 Func _GUIListViewEx_Init($hLV, $aArray = "", $iStart = 0, $iColour = 0, $fImage = False, $iAdded = 0, $sCols = "*")
+	ListViewColorsFonts_Init($eventList, 7) ; initialize the color option
 
 	Local $iIndex = 0
 
@@ -252,6 +253,7 @@ EndFunc   ;==>_GUIListViewEx_Init
 ; Example........: Yes
 ;=====================================================================================================================
 Func _GUIListViewEx_Close($iIndex = 0)
+	ListViewColorsFonts_Exit($eventList, True) ; delete the the color option initialization
 
 	; Check valid index
 	If $iIndex < 0 Or $iIndex > $aGLVEx_Data[0][0] Then Return SetError(1, 0, 0)

@@ -3,7 +3,7 @@
 #AutoIt3Wrapper_Compression=0
 #AutoIt3Wrapper_Res_Comment=MPC-HC Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=Media Player Classic Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=1.11.18.2
+#AutoIt3Wrapper_Res_Fileversion=1.24.18.4
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=2014-2018 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
@@ -39,6 +39,8 @@
 #include 'includes\SYS_MPC-HC-API.au3' ; All of the API ties to Media Player Classic (modularized because I shouldn't have to change it)
 #include 'includes\SYS_ShellFile.au3' ; Associating the filetype with MPC-HC Looper
 #include 'includes\SYS_GUIListViewEx.au3' ; The new listview control (that lets you drag, drop, etc.)
+
+#include 'includes\SYS_ListViewColorsFonts.au3' ; routines for changing colors in listview fonts
 
 ; **************************************************************************
 ; ******* GLOBAL DECLARATIONS **********************************************
@@ -95,6 +97,10 @@ Global $randomPlayOrder[0]
 Global $eventListIndex, $completeEventList
 Global $currentlySearching = 0
 Global $searchResultsList[0]
+
+Global $isFontInitialized = 0
+
+; #include 'includes\TRAY_createTray.au3'
 
 ; **************************************************************************
 ; ****** HOLDING SHIFT DOWN IN THE BEGINNING TO TRIGGER DEFAULTS ***********
@@ -221,6 +227,7 @@ $searchClearButton = GUICtrlCreateButton("Clear", 382, 129, 43, 24) ; GUI Elemen
 
 ; bottom event list GUI controls
 $eventList = GUICtrlCreateListView("#|Event|In Point|Out Point|Duration|Filename", 0, 160, (403 + 30), 257, BitOR($LVS_REPORT, $LVS_SHOWSELALWAYS), BitOR($LVS_EX_GRIDLINES, $LVS_EX_FULLROWSELECT))  ; GUI Element 35
+
 $HotKeyStatusTF = GUICtrlCreateLabel("", 6, 421, 90, 19) ; GUI Element 36
 $currentEventStatusTF = GUICtrlCreateLabel("", 106, 421, 318, 19, $SS_RIGHT) ; GUI Element 37
 
@@ -233,7 +240,7 @@ $listAddButton = GUICtrlCreateButton("Add", 305, 445, 57, 25) ; GUI Element 43
 $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Element 44
 
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
-$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [01-11-18]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [02-01-18]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
 $progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-18 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
@@ -321,7 +328,6 @@ For $i = 36 to 49 ; set resizing of every element below the event list to don't 
 Next
 
 _GUIListViewEx_MsgRegister() ; for Dragging and Dropping items
-;~ _GUICtrlListView_RegisterSortCallBack($eventList, True, True)
 
 #include 'includes\SYS_WM_GETMINMAXINFO.au3' ; forces the window to stay the same width
 #include 'includes\DEFAULTS_loadDefaults.au3' ; all of the default loading code

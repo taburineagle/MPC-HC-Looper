@@ -26,6 +26,8 @@ Func modifyEvent($eventLocation, $newPosition, $newName, $newINPoint, $newOUTPoi
 	NumberToTimeString(getEventDur($newINPoint, $newOUTPoint)) & "|" & _
 	$newFile)
 
+	highlightItem($eventLocation)
+
 	If $eventLocation = 0 Then
 		_GUIListViewEx_Up() ; if the event is the first in the list, it will re-create on the 2nd spot, so move it up!
 	EndIf
