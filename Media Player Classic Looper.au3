@@ -1,9 +1,9 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=MPC Icons.ico
-#AutoIt3Wrapper_Compression=0
+#AutoIt3Wrapper_UseUpx=y
 #AutoIt3Wrapper_Res_Comment=MPC-HC Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=Media Player Classic Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=1.24.18.4
+#AutoIt3Wrapper_Res_Fileversion=2.1.18.8
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=2014-2018 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
@@ -98,7 +98,7 @@ Global $eventListIndex, $completeEventList
 Global $currentlySearching = 0
 Global $searchResultsList[0]
 
-Global $isFontInitialized = 0
+Global $isEventHighlighted = -1 ; stores whether there is a highlighted (playing) event
 
 ; #include 'includes\TRAY_createTray.au3'
 

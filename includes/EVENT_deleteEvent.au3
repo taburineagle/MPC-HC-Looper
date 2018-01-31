@@ -8,7 +8,7 @@ Func deleteEvent() ; delete an event in the event list
 
 		If $selectedItems[0] = getItemCount() Then ; if you chose to delete ERRYTHIN'
 			If $currentlySearching = 0 Then ; if you're not in search mode
-				$deleteFiles = MsgBox(262144 + 36, "Delete", "You chose to delete all of the events (" & $selectedItems[0] & " of " & getItemCount() & ") in the event list" & @CRLF & @CRLF & 'Deleting all the events will unload the current .looper file and clear the event list, creating a new session (the same as hitting the "Clear List" button) - are you sure you want to do that?')
+				$deleteFiles = MsgBox(262144 + 36, "Delete", "You chose to delete all of the events (" & $selectedItems[0] & " of " & getItemCount() & ") in the event list." & @CRLF & @CRLF & 'Deleting all the events will unload the current .looper file and clear the event list, creating a new session (the same as hitting the "Clear List" button) - are you sure you want to do that?')
 
 				If $deleteFiles = "6" Then
 					clearEvents()
@@ -89,6 +89,7 @@ Func deleteEvent() ; delete an event in the event list
 			EndIf
 
 			setModified()
+			$isEventHighlighted = -1
 
 			If $currentPlayingEvent = getItemCount() Then ; if we're playing the last event in the list currently
 				loadEvent($currentPlayingEvent - 1) ; load the penultimate event

@@ -29,9 +29,13 @@ Func highlightItem($selectedItem, $UNhighlight = 0)
 				ListViewColorsFonts_SetItemFonts($eventList, $i, -1, "", $iFontStyleNormal)
 			EndIf
 		Next
+
+		$isEventHighlighted = $selectedItem
 	Else
 		ListViewColorsFonts_SetItemColors($eventList, $selectedItem, -1, returnBGColor())
 		ListViewColorsFonts_SetItemFonts($eventList, $selectedItem, -1, "", $iFontStyleNormal)
+
+		$isEventHighlighted = -1
 	EndIf
 
 	ListViewColorsFonts_Redraw($eventList) ; redraw the events list with the above settings
@@ -45,7 +49,7 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 		GUICtrlSetData($inTF, _GUICtrlListView_GetItemText($eventList, $selectedItem, 2))
 		GUICtrlSetData($outTF, _GUICtrlListView_GetItemText($eventList, $selectedItem, 3))
 
-		highlightItem($selectedItem)
+		If $selectedItem <> $isEventHighlighted Then highlightItem($selectedItem) ; if the highlight isn't set, then set it!
 
 		$currentName = _GUICtrlListView_GetItemText($eventList, $selectedItem, 1)
 
@@ -78,7 +82,9 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 		EndIf
 
 		If $hotKeysActive = true Then ; if either Looper or the main MPC-HC window are main and hotkeys are active, then...
-			MakeMPCActive() ; make MPC-HC the active program (so it can respond to its own keyboard shortcuts)
+			If GUICtrlRead($loopButton) <> "Playlist Mode" Then
+				MakeMPCActive() ; make MPC-HC the active program (so it can respond to its own keyboard shortcuts)
+			EndIf
 		EndIf
 
 		__MPC_send_message($ghnd_MPC_handle, $CMD_PLAY, "") ; forces MPC to pause
