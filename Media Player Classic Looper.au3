@@ -3,10 +3,11 @@
 #AutoIt3Wrapper_UseUpx=y
 #AutoIt3Wrapper_Res_Comment=MPC-HC Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=Media Player Classic Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2.1.18.8
+#AutoIt3Wrapper_Res_Fileversion=2.1.18.10
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=2014-2018 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
+#AutoIt3Wrapper_Res_requestedExecutionLevel=None
 #AutoIt3Wrapper_Res_Icon_Add=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\MPCD.ico
 #AutoIt3Wrapper_Run_Au3Stripper=y
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
@@ -100,7 +101,7 @@ Global $searchResultsList[0]
 
 Global $isEventHighlighted = -1 ; stores whether there is a highlighted (playing) event
 
-; #include 'includes\TRAY_createTray.au3'
+#include 'includes\TRAY_createTray.au3' ; create "Headless mode" menu in Systray
 
 ; **************************************************************************
 ; ****** HOLDING SHIFT DOWN IN THE BEGINNING TO TRIGGER DEFAULTS ***********
