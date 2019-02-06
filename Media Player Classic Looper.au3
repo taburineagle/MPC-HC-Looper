@@ -1,20 +1,18 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=MPC Icons.ico
-#AutoIt3Wrapper_UseUpx=y
 #AutoIt3Wrapper_Res_Comment=MPC-HC Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=Media Player Classic Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2.1.18.10
+#AutoIt3Wrapper_Res_Fileversion=2.6.19.1
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
-#AutoIt3Wrapper_Res_LegalCopyright=2014-2018 Zach Glenwright
+#AutoIt3Wrapper_Res_LegalCopyright=2014-2019 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
-#AutoIt3Wrapper_Res_requestedExecutionLevel=None
 #AutoIt3Wrapper_Res_Icon_Add=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\MPCD.ico
 #AutoIt3Wrapper_Run_Au3Stripper=y
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
 ; **************************************************************************
 ; ******* Media Player Classic Looper! *************************************
-; ******* (C) 2014-18 Zach Glenwright **************************************
+; ******* (C) 2014-19 Zach Glenwright **************************************
 ; **************************************************************************
 ; ******* http://www.gullswingmedia.com ************************************
 ; **************************************************************************
@@ -40,8 +38,6 @@
 #include 'includes\SYS_MPC-HC-API.au3' ; All of the API ties to Media Player Classic (modularized because I shouldn't have to change it)
 #include 'includes\SYS_ShellFile.au3' ; Associating the filetype with MPC-HC Looper
 #include 'includes\SYS_GUIListViewEx.au3' ; The new listview control (that lets you drag, drop, etc.)
-
-#include 'includes\SYS_ListViewColorsFonts.au3' ; routines for changing colors in listview fonts
 
 ; **************************************************************************
 ; ******* GLOBAL DECLARATIONS **********************************************
@@ -98,8 +94,6 @@ Global $randomPlayOrder[0]
 Global $eventListIndex, $completeEventList
 Global $currentlySearching = 0
 Global $searchResultsList[0]
-
-Global $isEventHighlighted = -1 ; stores whether there is a highlighted (playing) event
 
 #include 'includes\TRAY_createTray.au3' ; create "Headless mode" menu in Systray
 
@@ -176,7 +170,6 @@ $mainWindow = GUICreate("MPC-HC Looper!", (404 + 30), 538, (@DesktopWidth - (429
 
 ; main topmost GUI controls
 $inButton = GUICtrlCreateLabel("IN", 38, 34, 34, 25, BitOR($SS_CENTER, $SS_CENTERIMAGE), $WS_EX_CLIENTEDGE) ; GUI Element 3
-
 ; ==================================================================
 ; Procedure to fix the "copy to clipboard" issue when clicking on labels
 ; using code snippet by rover 2k9 that stops double clicking labels (so it doesn't copy to clipboard)
@@ -187,7 +180,6 @@ $inButton = GUICtrlCreateLabel("IN", 38, 34, 34, 25, BitOR($SS_CENTER, $SS_CENTE
 #include 'includes\SYS_Remove_CS_DBLCLKS.au3'
 _Remove_CS_DBLCLKS(-1) ; remove double-click ability from static controls (but not from buttons or list views!)
 ; ==================================================================
-
 $inTF = GUICtrlCreateInput("", 8, 64, 124, 25, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER)) ; GUI Element 4
 $inDecButton = GUICtrlCreateLabel("-", 8, 34, 27, 25, BitOR($SS_CENTER, $SS_CENTERIMAGE), $WS_EX_CLIENTEDGE)
 $inIncButton = GUICtrlCreateLabel("+", 104, 34, 27, 25, BitOR($SS_CENTER, $SS_CENTERIMAGE), $WS_EX_CLIENTEDGE) ; GUI Element 6
@@ -228,7 +220,6 @@ $searchClearButton = GUICtrlCreateButton("Clear", 382, 129, 43, 24) ; GUI Elemen
 
 ; bottom event list GUI controls
 $eventList = GUICtrlCreateListView("#|Event|In Point|Out Point|Duration|Filename", 0, 160, (403 + 30), 257, BitOR($LVS_REPORT, $LVS_SHOWSELALWAYS), BitOR($LVS_EX_GRIDLINES, $LVS_EX_FULLROWSELECT))  ; GUI Element 35
-
 $HotKeyStatusTF = GUICtrlCreateLabel("", 6, 421, 90, 19) ; GUI Element 36
 $currentEventStatusTF = GUICtrlCreateLabel("", 106, 421, 318, 19, $SS_RIGHT) ; GUI Element 37
 
@@ -241,8 +232,8 @@ $listAddButton = GUICtrlCreateButton("Add", 305, 445, 57, 25) ; GUI Element 43
 $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Element 44
 
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
-$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [02-01-18]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
-$progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-18 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
+$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [02-06-19]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-19 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
 GUICtrlSetImage(-1, "C:\Windows\System32\shell32.dll", -91)
@@ -297,7 +288,7 @@ GUICtrlSetOnEvent($searchEventButton, "searchEventList")
 GUICtrlSetOnEvent($searchClearButton, "searchEventListRestore")
 
 GUICtrlSetOnEvent($listAddButton, "addEvent")
-GUICtrlSetOnEvent($listModifyButton, "modifyEventPrompt")
+GUICtrlSetOnEvent($listModifyButton, "modifyEvent")
 GUICtrlSetOnEvent($listDeleteButton, "deleteEvent")
 GUICtrlSetOnEvent($listClearButton, "clearEvents")
 
@@ -306,8 +297,6 @@ GUICtrlSetOnEvent($listSaveButton, "saveList")
 
 GUICtrlSetOnEvent($optionsButton, "loadOptions")
 GUICtrlSetOnEvent($goToDirectoryButton, "openPathtoFile")
-
-GUICtrlSetOnEvent($progInfo, "loadURL") ; load the Gulls Wing Media website when you click on that bit of text on the main window
 
 #include 'includes\custom\MainGUIFonts.au3' ; Sets the fonts and colors for all of the buttons in the main window of MPC-HC Looper
 #include 'includes\custom\Main-tooltips.au3' ; Adds tooltips to each of the main window buttons in MPC-HC Looper
@@ -329,11 +318,10 @@ For $i = 36 to 49 ; set resizing of every element below the event list to don't 
 Next
 
 _GUIListViewEx_MsgRegister() ; for Dragging and Dropping items
+;~ _GUICtrlListView_RegisterSortCallBack($eventList, True, True)
 
 #include 'includes\SYS_WM_GETMINMAXINFO.au3' ; forces the window to stay the same width
 #include 'includes\DEFAULTS_loadDefaults.au3' ; all of the default loading code
-
-#include 'includes\GUI_contextMenu.au3' ; Adds context menu to events list
 
 ; **************************************************************************
 ; ****** MEDIA PLAYER CLASSIC TIES TO THIS PROGRAM *************************
@@ -462,7 +450,6 @@ WEnd
 #include 'includes\GUI_maximizeWindow.au3' ; maximizes the window to 3 predetermined sizes
 #include 'includes\GUI_minimizeWindow.au3' ; minimizes the window
 #include 'includes\GUI_restoreWindow.au3' ; makes the window normal size again
-#include 'includes\GUI_loadURL.au3' ; load the Gull's Wing Media website when you click on that link
 
 #include 'includes\MAIN_Uninitialize.au3' ; quitting procedure
 
@@ -535,9 +522,8 @@ WEnd
 #include 'includes\EVENT_initializeEventChange.au3' ; change specific GUI items if you're in the middle of adding or modifying an event
 
 #include 'includes\EVENT_addEvent.au3' ; add an event to the event list
-#include 'includes\EVENT_modifyEventPrompt.au3' ; prompt to modify an event from the event list
-#include 'includes\EVENT_modifyEvent.au3' ; modify an event (and delete event(s) if necessary) from the event list
-#include 'includes\EVENT_deleteEvent.au3' ; deleting an event (or multiple events) from the event list
+#include 'includes\EVENT_modifyEvent.au3' ; modify an event from the event list
+#include 'includes\EVENT_deleteEvent.au3' ; delete an event from the event list
 #include 'includes\EVENT_clearEvents.au3' ; delete ALL events from the event list
 
 #include 'includes\EVENT_loadPrevNextEvent.au3' ; what happens when you click on the previous or next event buttons

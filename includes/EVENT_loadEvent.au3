@@ -1,46 +1,3 @@
-Func returnColor()
-	If GUICtrlRead($loopButton) = "Loop Mode" Then
-		Return 0xb0f6b0 ; make the background color of the currently playing item the same color as the Loop Mode button
-	ElseIf GUICtrlRead($loopButton) = "Playlist Mode" Then
-		Return 0xffa882 ; "" Playlist mode button
-	ElseIf GUICtrlRead($loopButton) = "Shuffle Mode" Then
-		Return 0x85e7f0 ; "" Shuffle mode button
-	Else
-		Return 0xFFFFFF ; OFF is selected, so don't do anything colorish, just load the item
-	EndIf
-EndFunc
-
-Func returnBGColor()
-	If $currentlySearching = 0 Then
-		Return 0xFFFFFF
-	Else
-		Return 0xe4ffef
-	EndIf
-EndFunc
-
-Func highlightItem($selectedItem, $UNhighlight = 0)
-	If $UNhighlight = 0 Then
-		For $i = 0 to getItemCount() - 1
-			If $i = $selectedItem Then ; set the background color and foreground font to make the currently playing item stand out
-				ListViewColorsFonts_SetItemColors($eventList, $selectedItem, -1, returnColor())
-				ListViewColorsFonts_SetItemFonts($eventList, $selectedItem, -1, "", $iFontStyleBold)
-			Else ; reset all other items to the standard look
-				ListViewColorsFonts_SetItemColors($eventList, $i, -1, returnBGColor())
-				ListViewColorsFonts_SetItemFonts($eventList, $i, -1, "", $iFontStyleNormal)
-			EndIf
-		Next
-
-		$isEventHighlighted = $selectedItem
-	Else
-		ListViewColorsFonts_SetItemColors($eventList, $selectedItem, -1, returnBGColor())
-		ListViewColorsFonts_SetItemFonts($eventList, $selectedItem, -1, "", $iFontStyleNormal)
-
-		$isEventHighlighted = -1
-	EndIf
-
-	ListViewColorsFonts_Redraw($eventList) ; redraw the events list with the above settings
-EndFunc
-
 Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the event list
 	$currentFile = _GUICtrlListView_GetItemText($eventList, $selectedItem, 5)
 	$fileToLoad = findFileExists($currentFile, $currentLooperFile) ; finds the path to the file, either in it's original dir, or relative to the looper file
@@ -49,7 +6,8 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 		GUICtrlSetData($inTF, _GUICtrlListView_GetItemText($eventList, $selectedItem, 2))
 		GUICtrlSetData($outTF, _GUICtrlListView_GetItemText($eventList, $selectedItem, 3))
 
-		If $selectedItem <> $isEventHighlighted Then highlightItem($selectedItem) ; if the highlight isn't set, then set it!
+		_GUICtrlListView_SetItemSelected($eventList, -1, false, false) ; for Dragging and Dropping items
+		_GUICtrlListView_SetItemSelected($eventList, $selectedItem, True, True) ; for Dragging and Dropping items
 
 		$currentName = _GUICtrlListView_GetItemText($eventList, $selectedItem, 1)
 
@@ -78,12 +36,6 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 		Else
 			If $currentSpeed <> 100 Then
 				setSpeed(100)
-			EndIf
-		EndIf
-
-		If $hotKeysActive = true Then ; if either Looper or the main MPC-HC window are main and hotkeys are active, then...
-			If GUICtrlRead($loopButton) <> "Playlist Mode" Then
-				MakeMPCActive() ; make MPC-HC the active program (so it can respond to its own keyboard shortcuts)
 			EndIf
 		EndIf
 

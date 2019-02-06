@@ -88,6 +88,3 @@ GUICtrlSetState($listModifyButton, $GUI_DISABLE) ; Disables the Modify button wh
 GUICtrlSetState($listClearButton, $GUI_DISABLE) ; Disables the Modify button when starting the program
 GUICtrlSetState($nextEventButton, $GUI_DISABLE) ; Disables the Modify button when starting the program
 GUICtrlSetState($previousEventButton, $GUI_DISABLE) ; Disables the Modify button when starting the program
-
-; Mouse pointer settings (for the clickable URL)
-GUICtrlSetCursor($progInfo, 0) ; set the URL info mouse cursor to the clickable hand when you mouse over it

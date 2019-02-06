@@ -31,7 +31,6 @@ Func addEvent() ; add an event to the event list
 
 		GUICtrlSetData($currentEventStatusTF, "Please wait, adding event to list...")
 		$currentPlayingEvent = getItemCount() - 1 ; set the current playing event to this new event
-		highlightItem($currentPlayingEvent) ; highlight the new addition
 	EndIf
 
 	initializeEventChange($GUI_ENABLE)

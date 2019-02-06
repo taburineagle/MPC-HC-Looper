@@ -1,6 +1,4 @@
 Func clearOSDInfo($changeName = 1)
-	If $isEventHighlighted <> -1 Then highlightItem($currentPlayingEvent, 1) ; if the event is highlighted (playing), then unhighlight it - but just once
-
 	If $changeName = 1 Then
 		$currentEventName = ""
 	EndIf

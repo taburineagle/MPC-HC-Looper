@@ -1,6 +1,7 @@
 Func Uninitialize() ; close the MPC Looper window and quit, asking if you want to save
 	If getItemCount() = 0 Then
 		writeCurrentlyPlayingFile() ; If nothing has changed in the playlist, quit anyway
+;~ 		Exit
 	EndIf
 
 	If $tryingToQuit = 0 Then
@@ -64,5 +65,6 @@ Func writeCurrentlyPlayingFile()
 		EndIf
 	EndIf
 
+;~ 	_GUICtrlListView_UnRegisterSortCallBack($eventList)
 	Exit
 EndFunc
