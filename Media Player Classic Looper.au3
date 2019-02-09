@@ -52,7 +52,9 @@ Const $openWatchFile = @TempDir & "\MPC_Looper.txt" ; the file to look for (if y
 
 Global $isModified = 0 ; whether or not the current event list has been changed
 Global $currentLooperFile ; the name of the current .looper file loaded
+
 Global $currentPlayingEvent = -1 ; The event that's currently playing
+Global $currentPlayingEventPos = 0 ; The current playing event's position in the events list
 
 Global $isLoaded = 0 ; whether the file is open in MPC or not yet
 Global $currentLoadedFile = ""; Which file is currently open in MPC

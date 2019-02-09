@@ -3,11 +3,11 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 	$fileToLoad = findFileExists($currentFile, $currentLooperFile) ; finds the path to the file, either in it's original dir, or relative to the looper file
 
 	If $fileToLoad <> -1 Then
+		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, $currentPlayingEventPos, 0) ; switch the current playing event # back to it's original state
+		$currentPlayingEventPos = _GUICtrlListView_GetItemText($eventList, $selectedItem, 0) ; get the current playing event # from the new event to load
+
 		GUICtrlSetData($inTF, _GUICtrlListView_GetItemText($eventList, $selectedItem, 2))
 		GUICtrlSetData($outTF, _GUICtrlListView_GetItemText($eventList, $selectedItem, 3))
-
-		_GUICtrlListView_SetItemSelected($eventList, -1, false, false) ; for Dragging and Dropping items
-		_GUICtrlListView_SetItemSelected($eventList, $selectedItem, True, True) ; for Dragging and Dropping items
 
 		$currentName = _GUICtrlListView_GetItemText($eventList, $selectedItem, 1)
 
@@ -45,6 +45,7 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 		_GUICtrlListView_EnsureVisible($eventList, $currentPlayingEvent, True)
 
 		updateEventOSDInfo($currentPlayingEvent + 1)
+		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0) ; tell the event list that the new event is currently playing
 	Else
 		MsgBox(262144 + 48, "Can't find media file for the event you loaded", "This event's media file can not be found:" & @CRLF & $currentFile & @CRLF & @CRLF & "Media files either need to be in the same directory as the .looper file:" & @CRLF & "          > [example: (path to current .looper file)\MediaFile.mp4] <" & @CRLF & "or in the original directory they were in:" & @CRLF & "         > [example: E:\Media\MediaFile.mp4] <" & @CRLF & "for MPC-HC Looper to be able find them to load them for playback.")
 	EndIf

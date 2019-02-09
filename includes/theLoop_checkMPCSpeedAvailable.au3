@@ -1,5 +1,5 @@
 Func checkMPCSpeedAvailable()
-	If WinGetTitle("[CLASS:MediaPlayerClassicW]") = "Media Player Classic Home Cinema" Then
+	If WinGetTitle(HWnd($ghnd_MPC_handle)) = "Media Player Classic Home Cinema" Then
 		If GUICtrlRead($loopButton) <> "Playlist Mode" Then
 			If GUICtrlGetState($listAddButton) = 80 Then GUICtrlSetState($listAddButton, $GUI_DISABLE)
 		EndIf
