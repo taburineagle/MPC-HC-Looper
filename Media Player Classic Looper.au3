@@ -459,6 +459,7 @@ WEnd
 ; ******* SPEED SETTING HANDLERS *******************************************
 ; **************************************************************************
 #include 'includes\SPEED_checkNameSpeedSetting.au3' ; checks the current name to see if it has a speed setting in it (<S:50>)
+#include 'includes\theLoop_checkNameRepeatSetting.au3' ; checks the current name to see if it has a repeat setting in it (<L:50>)
 #include 'includes\SPEED_sliderMoving.au3' ; activates when you move the slider
 #include 'includes\SPEED_setSpeed.au3' ; sets the speed to a specific percent
 

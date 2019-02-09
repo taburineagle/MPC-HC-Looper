@@ -1,10 +1,12 @@
 Func checkNameSpeedSetting($theName)
-	$speedSetting = 0
+	$speedSetting = 100
 
-	If StringInStr($theName, "<S:") = 1 Then
-		$theOffset = StringInStr($theName, ">")
-		$speedSetting = StringLeft($theName, $theOffset - 1)
-		$speedSetting = StringRight($speedSetting, StringLen($speedSetting) - 3)
+	$theOffset = StringInStr($theName, "<S:")
+
+	If $theOffset <> 0 Then
+		$speedSetting = StringTrimLeft($theName, $theOffset + 2)
+		$endBracketOffset = StringInStr($speedSetting, ">")
+		$speedSetting = StringLeft($speedSetting, $endBracketOffset - 1)
 	EndIf
 
 	Return $speedSetting
