@@ -1,7 +1,7 @@
 Opt("TrayMenuMode", 3) ; does not show default menu, and does not automatically set things as checked when clicking
 Opt("TrayOnEventMode", 1) ; responds to direct calls to tray menu functions
 TraySetState(1) ; show the tray icon
-TraySetToolTip("MPC-HC Looper [02-06-19] by Zach Glenwright") ; set the system tray icon text
+TraySetToolTip("MPC-HC Looper [02-10-19] by Zach Glenwright") ; set the system tray icon text
 
 ;~ --------------------------------------------------------------
 ;~ ===================== TRAY MENU ITEMS ========================

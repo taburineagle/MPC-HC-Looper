@@ -30,7 +30,10 @@ Func addEvent() ; add an event to the event list
 		_GUIListViewEx_Insert($newItem)  ; put the new event into the event list
 
 		GUICtrlSetData($currentEventStatusTF, "Please wait, adding event to list...")
+
 		$currentPlayingEvent = getItemCount() - 1 ; set the current playing event to this new event
+		$currentPlayingEventPos = $currentPlayingEvent + 1
+		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0)
 	EndIf
 
 	initializeEventChange($GUI_ENABLE)
