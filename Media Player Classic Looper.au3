@@ -126,8 +126,16 @@ If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "allowMultipleInstances", 0) 
 	Else
 		checkWhichLooperToLoad()
 	EndIf
-Else
-	If RegRead("HKCU\Software\MPC-HC\MPC-HC\Settings", "AllowMultipleInstances") <> 1 Then
+Else ; We are allowing multiple instances in Looper, let's check to see if MPC-HC is...
+	$PathtoMPC = IniRead(@ScriptDir & "\MPCLooper.ini", "System", "MPCEXE", "") ; the path to MPC-HC for this session
+	$PathtoMPC = StringLeft($PathtoMPC, StringInStr($PathtoMPC, "\", Default, -1)) ; MPC-HC's base program path
+
+	; if none of the below give a positive value, or the files don't exist, the result at the end will just be 0 (no file = 0, by default)
+	$MPCAllowCheck = IniRead($PathtoMPC & "mpc-hc.ini", "Settings", "AllowMultipleInstances", 0) ; check 32-bit INI file (if it exists)
+	$MPCAllowCheck = $MPCAllowCheck + IniRead($PathtoMPC & "mpc-hc64.ini", "Settings", "AllowMultipleInstances", 0) ; check 64-bit INI file (if it exists)
+	$MPCAllowCheck = $MPCAllowCheck + RegRead("HKCU\Software\MPC-HC\MPC-HC\Settings", "AllowMultipleInstances") ; check MPC-HC's registry setting
+
+	If $MPCAllowCheck = 0 Then ; If we returned from all the checks above, and none had this flag set, then MPC-HC doesn't allow multiple instances...
 		If _Singleton("MPC Looper", 1) = 0 Then ; we are allowing multiple instances, but MPC-HC is NOT...
 			launchFromExplorer() ; copy the filename into the text file for later opening (for the main process to pick up)
 			MsgBox(48 + 262144, "Multiple Instance Warning!", "You have multiple instances turned on in Looper, and you just launched another instance, but MPC-HC isn't set to allow multiple instances.  In that case, Looper will act like normal and not open any other multiple instances of itself." & @CRLF & @CRLF & "To allow the multiple instance feature, go to the MPC-HC options pane (View menu > Options), then click on " & '"Player"' & " at the top left and choose " & '"Open a new player for each media file played"' & ", and then save your changes - turning this on will allow you to have multiple Looper sessions running at the same time.")
