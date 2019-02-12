@@ -29,6 +29,9 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 
 		$speedSetting = checkNameSpeedSetting($currentName)
 
+		$loopRepeats[0] = checkNameRepeatSetting($currentName) ; the number of repeats for the current loop
+		$loopRepeats[1] = 1 ; always set this to 1 (this is the first loop)
+
 		If $speedSetting <> 0 Then
 			If $currentSpeed <> $speedSetting Then
 				setSpeed($speedSetting)

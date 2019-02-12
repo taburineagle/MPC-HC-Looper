@@ -8,7 +8,16 @@ Func updateEventOSDInfo($eventToLoad)
 		If $eventToLoad <> 0 Then
 			$currentEventName = _GUICtrlListView_GetItemText($eventList, $eventToLoad - 1, 1)
 			$currentEventDur = NumberToTimeString(getEventDur($eventToLoad))
-			$currentEventCounter = "Playing event " & $eventToLoad & " out of " & $numOfEvents & " (" & $currentEventDur & ")"
+
+			$currentEventCounter = "Playing event " & $eventToLoad & " out of " & $numOfEvents & " "
+
+			If $loopRepeats[0] > 0 Then
+				If GUICtrlRead($loopButton) = "Playlist Mode" Then
+					$currentEventCounter = $currentEventCounter & "[Repeats: " & $loopRepeats[1] & " / " & $loopRepeats[0] & "] "
+				EndIf
+			EndIf
+
+			$currentEventCounter = $currentEventCounter & "(" & $currentEventDur & ")"
 		Else
 			clearOSDInfo() ; if the event to load is 0 (which means a new file is open and didn't preload an event), show summary
 

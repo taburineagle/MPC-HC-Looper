@@ -29,16 +29,16 @@ Func eventNamePrompt($textToInsert = "")
 	$eventNameTF = GUICtrlCreateEdit("", 8, 26, 297, 22, $ES_AUTOVSCROLL)
 
 	$speedLabel = GUICtrlCreateLabel("What Speed?", 8, 52, 81, 21, $SS_CENTER)
-	$speedTF = GUICtrlCreateEdit("---", 8, 74, 81, 22, $ES_AUTOVSCROLL)
+	$speedTF = GUICtrlCreateEdit("", 8, 74, 81, 22, $ES_AUTOVSCROLL)
 
-	$repeatLabel = GUICtrlCreateLabel("How many times to play this loop?", 104, 52, 205, 21, $SS_CENTER)
-	$repeatTF = GUICtrlCreateEdit("---", 104, 74, 201, 22, $ES_AUTOVSCROLL)
+	$repeatLabel = GUICtrlCreateLabel("How many repeats? (0 for endless)", 104, 52, 205, 21, $SS_CENTER)
+	$repeatTF = GUICtrlCreateEdit("0", 104, 74, 201, 22, $ES_AUTOVSCROLL)
 
 	$eventDialogOKButton = GUICtrlCreateButton("OK", 8, 112, 142, 25)
 	$eventDialogCancelButton = GUICtrlCreateButton("Cancel", 156, 112, 150, 25)
 
 	GUICtrlSetFont($eventHappenedLabel, 10, 400, 0, "Segoe UI")
-	GUICtrlSetFont($eventNameTF, 10, 400, 0, "Segoe UI")
+ 	GUICtrlSetFont($eventNameTF, 10, 400, 0, "Segoe UI")
 
 	GUICtrlSetFont($speedLabel, 10, 400, 0, "Segoe UI")
 	GUICtrlSetFont($speedTF, 10, 400, 0, "Segoe UI")
@@ -77,12 +77,15 @@ Func eventNamePrompt($textToInsert = "")
 			Case $eventDialogOKButton
 				$textReturned = ""
 
-				If GUICtrlRead($speedTF) <> "100" Then
-					$textReturned = $textReturned & "<S:" & GUICtrlRead($speedTF) & ">"
+				$speedReturned = GUICtrlRead($speedTF)
+				$repeatReturned = GUICtrlRead($repeatTF)
+
+				If isAcceptable($speedReturned) And $speedReturned <> "100" Then
+					$textReturned = $textReturned & "<S:" & $speedReturned & ">"
 				EndIf
 
-				If GUICtrlRead($repeatTF) <> "---" Then
-					$textReturned = $textReturned & "<L:" & GUICtrlRead($repeatTF) & ">"
+				If isAcceptable($repeatReturned) And $repeatReturned <> "0" Then
+					$textReturned = $textReturned & "<L:" & $repeatReturned & ">"
 				EndIf
 
 				If GUICtrlRead($eventNameTF) = "" Then

@@ -41,6 +41,7 @@ Func switchToPlaylist()
 		GUICtrlSetBkColor($loopButton, 0xffa882)
 		switchEditingControls($GUI_DISABLE)
 		clearRandomization()
+		; _GUICtrlListView_SetItemSelected($eventList, -1, false, false) ; clears any selection to force Playlist mode to continue
 	Else
 		displayError("Playlist Mode")
 		switchToLoop() ; if the event list is empty, just switch to OFF mode

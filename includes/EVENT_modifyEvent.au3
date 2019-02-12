@@ -33,8 +33,5 @@ Func modifyEvent($eventLocation, $newPosition, $newName, $newINPoint, $newOUTPoi
 	GUICtrlSetData($currentEventStatusTF, "Please wait, saving event data...")
 
 	loadEvent($eventLocation) ; re-load the event once you're done modifying it
-
-	; This section was orignally a conditional for the loadEvent call above, but changed it due to possible speed changes once modifying (so it always reloads)
-	; If $deleteTo - $deleteFrom > 0 Then ; if you're combining a bunch of events, re-load the event once you're done combining them - maybe move this to the actual question
-	; EndIf
+	_GUICtrlListView_SetItemSelected($eventList, -1, false, false) ; clears any selection (again) to force Playlist mode to continue
 EndFunc

@@ -9,5 +9,9 @@ Func checkNameSpeedSetting($theName)
 		$speedSetting = StringLeft($speedSetting, $endBracketOffset - 1)
 	EndIf
 
-	Return $speedSetting
+	If isAcceptable($speedSetting) Then ; check to make sure the returned value of above is a valid number
+		Return $speedSetting
+	Else
+		Return 100 ; return 100 (100%) for speeds that are invalidly set
+	EndIf
 EndFunc

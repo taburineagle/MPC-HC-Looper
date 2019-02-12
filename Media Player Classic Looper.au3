@@ -53,7 +53,7 @@ Const $openWatchFile = @TempDir & "\MPC_Looper.txt" ; the file to look for (if y
 Global $isModified = 0 ; whether or not the current event list has been changed
 Global $currentLooperFile ; the name of the current .looper file loaded
 
-Global $loopRepeats[2] = [4, 1] ; $loopRepeats[0] = the number of repeats, $loopRepeats[1] = the current iteration of the repeat
+Global $loopRepeats[2] = [0, 1] ; $loopRepeats[0] = the number of repeats, $loopRepeats[1] = the current iteration of the repeat
 
 Global $currentPlayingEvent = -1 ; The event that's currently playing
 Global $currentPlayingEventPos = 0 ; The current playing event's position in the events list
