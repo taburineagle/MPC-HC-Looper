@@ -39,9 +39,40 @@ Func doTheLoop()
 			If $currentOutPoint < $currentPosition Then ; the current position is past the OUT point, so...
 				If GUICtrlRead($inTF) <> "" Then
 					If GUICtrlRead($loopButton) = "Loop Mode" Then
-						__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, (TimeStringToNumber($currentInPoint))) ; set it to the IN point, a.k.a. LOOP IT
+						If $loopRepeats[0] = 0 Or $loopRepeats[1] < $loopRepeats[0] Then
+							__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, (TimeStringToNumber($currentInPoint))) ; set it to the IN point, a.k.a. LOOP IT
+
+							If $loopRepeats[0] <> 0 Then
+								$loopRepeats[1] = $loopRepeats[1] + 1
+							EndIf
+						Else
+							__MPC_send_message($ghnd_MPC_handle, $CMD_PAUSE, "") ; forces MPC to pause (if we've reached the amount of loops set in the <L:> setting
+						EndIf
 					ElseIf GUICtrlRead($loopButton) = "Playlist Mode" Then
-						loadPrevNextEvent(1)
+						If $loopRepeats[0] = 0 Or $loopRepeats[1] < $loopRepeats[0] Then
+							__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, (TimeStringToNumber($currentInPoint))) ; set it to the IN point, a.k.a. LOOP IT
+
+							If $loopRepeats[0] <> 0 Then
+								$loopRepeats[1] = $loopRepeats[1] + 1
+							EndIf
+						Else
+							$loopRepeats[0] = 2 ; just here for testing, next loop has 2 repeats
+							$loopRepeats[1] = 1 ; also just here for testing, and we're on the first one
+
+							; the above code (setting $loopRepeats) should be done on loadEvent(), not here - once again, just for testing...
+
+							; just a note, move the first part of the loop repeat code outside of the mode conditions (the recue part) so
+							; we don't write that piece of code multiple times (that's just wasteful! - and kind of pointless to boot!)
+							; and then use the mode conditions for the Else statement (so if it's not a "repeating" event, you can just do
+							; the normal behavior, but if it is a "repeating" event, make sure to play the loop for n times, THEN do the
+							; normal behavior...)  Also, when skipping from one mode to another, should we reset the count of iterations to 1
+							; again (3 plays in Loop mode for a 4-repeat loop, then switch to Playlist mode - should we then say we're in
+							; play 4 of that loop, or jump back to 1 for the new mode... I'm thinking one...)
+
+							; ...also, lemur.  Definitely, lemur :)
+
+							loadPrevNextEvent(1) ; if the count of loops is over, then go to the next event
+						EndIf
 					ElseIf GUICtrlRead($loopButton) = "Shuffle Mode" Then
 						$nextEvent = $randomPlayOrder[$randomPlayOrder[UBound($randomPlayOrder) - 1]]
 						loadEvent($nextEvent)

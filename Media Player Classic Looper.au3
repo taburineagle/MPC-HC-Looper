@@ -53,6 +53,8 @@ Const $openWatchFile = @TempDir & "\MPC_Looper.txt" ; the file to look for (if y
 Global $isModified = 0 ; whether or not the current event list has been changed
 Global $currentLooperFile ; the name of the current .looper file loaded
 
+Global $loopRepeats[2] = [4, 1] ; $loopRepeats[0] = the number of repeats, $loopRepeats[1] = the current iteration of the repeat
+
 Global $currentPlayingEvent = -1 ; The event that's currently playing
 Global $currentPlayingEventPos = 0 ; The current playing event's position in the events list
 
@@ -242,7 +244,7 @@ $listAddButton = GUICtrlCreateButton("Add", 305, 445, 57, 25) ; GUI Element 43
 $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Element 44
 
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
-$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [02-10-19]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [02-11-19] RC", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
 $progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-19 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
