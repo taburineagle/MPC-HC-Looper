@@ -19,6 +19,10 @@ Func modifyEvent($eventLocation, $newPosition, $newName, $newINPoint, $newOUTPoi
 
 	_GUIListViewEx_Delete() ; delete the currently selected event item(s)
 
+	If $newPosition = "▶" Then
+		$newPosition = $currentPlayingEventPos
+	EndIf
+
 	_GUIListViewEx_Insert($newPosition & "|" & _
 	$newName & "|" & _
 	$newINPoint & "|" & _

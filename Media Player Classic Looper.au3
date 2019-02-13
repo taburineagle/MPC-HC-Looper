@@ -244,7 +244,11 @@ $listAddButton = GUICtrlCreateButton("Add", 305, 445, 57, 25) ; GUI Element 43
 $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Element 44
 
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
-$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [02-11-19] RC", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+
+; The name of the program - auto-generated for beta releases, uncomment to release a specific version!
+; $progTitle = GUICtrlCreateLabel("Media Player Classic Looper [2-13-19] RC", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [" & @MON & "-" & @MDAY & "-" & StringRight(@YEAR, 2) & "] RC", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+
 $progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-19 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
