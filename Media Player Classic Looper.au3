@@ -316,9 +316,7 @@ GUICtrlSetOnEvent($goToDirectoryButton, "openPathtoFile")
 #include 'includes\custom\MainGUIFonts.au3' ; Sets the fonts and colors for all of the buttons in the main window of MPC-HC Looper
 #include 'includes\custom\Main-tooltips.au3' ; Adds tooltips to each of the main window buttons in MPC-HC Looper
 
-$disableToolTips = IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "disableToolTips", "0")
-
-If $disableToolTips <> 1 Then
+If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "disableToolTips", "0") <> 1 Then
 	loadToolTips(1)
 EndIf
 
@@ -333,7 +331,6 @@ For $i = 36 to 49 ; set resizing of every element below the event list to don't 
 Next
 
 _GUIListViewEx_MsgRegister() ; for Dragging and Dropping items
-;~ _GUICtrlListView_RegisterSortCallBack($eventList, True, True)
 
 #include 'includes\SYS_WM_GETMINMAXINFO.au3' ; forces the window to stay the same width
 #include 'includes\DEFAULTS_loadDefaults.au3' ; all of the default loading code
