@@ -48,7 +48,6 @@ Opt("GUIOnEventMode", 1) ; Change to OnEvent mode
 Opt("GUICloseOnESC", 0) ; Don't close the GUI by hitting the ESC button
 
 Const $windowTitle = "MPC-HC Looper!" ; the main title in the program
-Const $openWatchFile = @TempDir & "\MPC_Looper.txt" ; the file to look for (if you double click a file in Explorer, it will open it over the first one)
 
 Global $isModified = 0 ; whether or not the current event list has been changed
 Global $currentLooperFile ; the name of the current .looper file loaded
@@ -152,7 +151,7 @@ EndIf
 
 Func launchFromExplorer()
 	If $cmdline[0] <> 0 Then
-		$writingFile = FileOpen($openWatchFile, 34)
+		$writingFile = FileOpen(@TempDir & "\MPC_Looper.txt", 34)
 		FileWrite($writingFile, $cmdline[1])
 		FileClose($writingFile)
 	EndIf
