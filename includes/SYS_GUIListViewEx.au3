@@ -1749,6 +1749,37 @@ Func _GUIListViewEx_WM_LBUTTONUP_Handler($hWnd, $iMsg, $wParam, $lParam)
 			_GUIListViewEx_Highlight($hGLVEx_SrcHandle, $cGLVEx_SrcID, $iGLVEx_InsertIndex + $i)
 		Next
 
+		; ======================================================================
+		; == START DODGY SELECTED EVENT DETECTION                             ==
+		; ======================================================================
+		; == ZAG 1-30-18 Looper-specific addition to the UDF                  ==
+		; == ZAG 2-17-19 Changed display system to the new arrow display      ==
+		; ======================================================================
+		; == Checks to see if the current playing loop is among the items     ==
+		; == moved in the items to drag and drop - if it is, it changes       ==
+		; == $currentPlayingEvent to the new position, and re-highlights the  ==
+		; == new position in the list.                                        ==
+		; ======================================================================
+
+		Local $itemsIndex[$iMultipleItems + 1][3]
+
+		For $i = 0 to $iMultipleItems
+			$itemsIndex[$i][0] = $iGLVEx_DraggedIndex + $i ; the first, 2nd, etc., index of the items being moved
+			$itemsIndex[$i][1] = $iGLVEx_InsertIndex + $i ; the first, 2nd, etc., index of the new locations
+			If $currentPlayingEvent = $iGLVEx_DraggedIndex + $i Then $itemsIndex[$i][2] = "*" ; if the current playing event is in the source items, it puts a * in that row
+		Next
+
+		$currentLoopMoved = _ArraySearch($itemsIndex, "*", Default, Default, Default, Default, Default, 2) ; searches for the * in the array above
+
+		If $currentLoopMoved <> -1 Then ; if the currently playing loop is in part of the selection
+			$currentPlayingEvent = $itemsIndex[$currentLoopMoved][1] ; change the $currentPlayingEvent to the new location in the events list
+			_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0) ; tell the event list that the new event is currently playing
+		EndIf
+
+		; ======================================================================
+		; == END DODGY SELECTED EVENT DETECTION                               ==
+		; ======================================================================
+
 		; Store amended array
 		$aGLVEx_Data[$aGLVEx_Data[0][1]][2] = $aGLVEx_SrcArray
 		; Delete copied arrays
