@@ -48,7 +48,6 @@ Opt("GUIOnEventMode", 1) ; Change to OnEvent mode
 Opt("GUICloseOnESC", 0) ; Don't close the GUI by hitting the ESC button
 
 Const $windowTitle = "MPC-HC Looper!" ; the main title in the program
-Const $openWatchFile = @TempDir & "\MPC_Looper.txt" ; the file to look for (if you double click a file in Explorer, it will open it over the first one)
 
 Global $isModified = 0 ; whether or not the current event list has been changed
 Global $currentLooperFile ; the name of the current .looper file loaded
@@ -152,7 +151,7 @@ EndIf
 
 Func launchFromExplorer()
 	If $cmdline[0] <> 0 Then
-		$writingFile = FileOpen($openWatchFile, 34)
+		$writingFile = FileOpen(@TempDir & "\MPC_Looper.txt", 34)
 		FileWrite($writingFile, $cmdline[1])
 		FileClose($writingFile)
 	EndIf
@@ -317,9 +316,7 @@ GUICtrlSetOnEvent($goToDirectoryButton, "openPathtoFile")
 #include 'includes\custom\MainGUIFonts.au3' ; Sets the fonts and colors for all of the buttons in the main window of MPC-HC Looper
 #include 'includes\custom\Main-tooltips.au3' ; Adds tooltips to each of the main window buttons in MPC-HC Looper
 
-$disableToolTips = IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "disableToolTips", "0")
-
-If $disableToolTips <> 1 Then
+If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "disableToolTips", "0") <> 1 Then
 	loadToolTips(1)
 EndIf
 
@@ -334,7 +331,6 @@ For $i = 36 to 49 ; set resizing of every element below the event list to don't 
 Next
 
 _GUIListViewEx_MsgRegister() ; for Dragging and Dropping items
-;~ _GUICtrlListView_RegisterSortCallBack($eventList, True, True)
 
 #include 'includes\SYS_WM_GETMINMAXINFO.au3' ; forces the window to stay the same width
 #include 'includes\DEFAULTS_loadDefaults.au3' ; all of the default loading code
