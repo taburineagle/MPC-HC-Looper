@@ -3,9 +3,9 @@ Func clearEvents() ; delete all of the events in the event list
 	$eventListIndex = 0
 	_GUICtrlListView_DeleteAllItems($eventList)
 
-	GUICtrlSetData($loopButton, "Loop Mode")
-	GUICtrlSetBkColor($loopButton, 0xb0f6b0)
-	switchEditingControls($GUI_ENABLE)
+	If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "dontForceLooperModeonOpen", 0) = 0 Then
+		switchToLoop()
+	EndIf
 
 	GUICtrlSetState($listDeleteButton, $GUI_DISABLE)
 	GUICtrlSetState($listModifyButton, $GUI_DISABLE)
