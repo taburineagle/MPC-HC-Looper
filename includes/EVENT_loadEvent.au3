@@ -58,31 +58,19 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 
 			$filePath = FileOpenDialog("Find Missing Media File", @DesktopDir, "Matching (" & $currentFilePath & ")|" & $currentExtension & " files (*." & $currentExtension & ")", Default, $currentFilePath)
 
-			; OK, this is getting a bit complicated - we need to do this:
-			;	- Return the entire array from the events list
-			;	- Check the filename parameter in every event to see if that file (the one that can't be found) is anywhere else in the list
-			;	- Ask (if there are any extra copies of that filename in any other event) if you want to replace them too
-			;	- If we replace them, then we have to:
-			;		- Regenerate the array using the new (found) path instead of the old one
-			;		- Delete the old array (uninitialize it from _GUIListViewEx
-			;		- Reinitialize the array (check the search functions to see how to do this) to _GUIListViewEx
-			;		- Re-display the events list with the new filename in place
-			;		- Re-open that event one more time, this time with the (found) file
-
-			; Also, this should be an option whether or not you want to find other copies of that file in the list:
-			; 	- Ask if you want to save the "updated" .looper file with the new pathname(s) over the original (broken link) version
-
 			$completeEventList = _GUIListViewEx_ReturnArray($eventListIndex) ; get the entire events list as an array to check other positions for this event
+			$completeEventList[$selectedItem] = StringReplace($completeEventList[$selectedItem], $currentFile, $filePath) ; replace the old filename with the new one for current event
 
-			For $i = 0 to UBound($completeEventList)
-				$currentItem = StringSplit($completeEventList[$i], "|")
-				_ArrayDisplay($currentItem)
-			Next
+			$findFileReplaceAll = MsgBox(4 + 32, "Replace All Missing Links?", "You've chosen to replace the file for this event:" & @CRLF & @CRLF & $currentFile & @CRLF & @CRLF & "With this new path:" & @CRLF & @CRLF & $filePath & @CRLF & @CRLF & "Do you want to replace all of the events that used the old path for this file with the file you just found?")
 
-			; $multipleEvents = _ArraySearch($completeEventList, $currentFile, Default, Default, Default, Default, Default, 5)
+			If $findFileReplaceAll = 6 Then ; if you want to replace all events that used the old path with the new path, then you clicked Yes
+				For $i = 0 to UBound($completeEventList) - 1
+					$completeEventList[$i] = StringReplace($completeEventList[$i], $currentFile, $filePath) ; replace the old filename with the new one for every one that matches
+				Next
+			EndIf
 
-			; _ArrayDisplay($completeEventList)
-			; _ArrayDisplay($multipleEvents)
+			reloadList($completeEventList) ; reload the events list again, but with the new filenames in place of the old ones
+			loadEvent($selectedItem) ; load the event we originally asked for again...
 		EndIf
 	EndIf
 EndFunc
