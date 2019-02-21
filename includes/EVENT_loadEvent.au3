@@ -49,7 +49,40 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 
 		updateEventOSDInfo($currentPlayingEvent + 1)
 		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0) ; tell the event list that the new event is currently playing
-	Else
-		MsgBox(262144 + 48, "Can't find media file for the event you loaded", "This event's media file can not be found:" & @CRLF & $currentFile & @CRLF & @CRLF & "Media files either need to be in the same directory as the .looper file:" & @CRLF & "          > [example: (path to current .looper file)\MediaFile.mp4] <" & @CRLF & "or in the original directory they were in:" & @CRLF & "         > [example: E:\Media\MediaFile.mp4] <" & @CRLF & "for MPC-HC Looper to be able find them to load them for playback.")
+	Else ; the event is looking for a file that it can't find...
+		$findFile = MsgBox(4 + 48, "Can't find media file for the event you loaded", "The media file for this event can not be found:" & @CRLF & @CRLF & $currentFile & @CRLF & @CRLF & "Would you like to try and locate it elsewhere?")
+
+		If $findFile = 6 Then
+			$currentFilePath = StringTrimLeft($currentFile, StringInStr($currentFile, "\", Default, -1)) ; the base name for the file we're looking for
+			$currentExtension = StringTrimLeft($currentFilePath, StringInStr($currentFilePath, ".", Default, -1)) ; the base extension (to limit results)
+
+			$filePath = FileOpenDialog("Find Missing Media File", @DesktopDir, "Matching (" & $currentFilePath & ")|" & $currentExtension & " files (*." & $currentExtension & ")", Default, $currentFilePath)
+
+			; OK, this is getting a bit complicated - we need to do this:
+			;	- Return the entire array from the events list
+			;	- Check the filename parameter in every event to see if that file (the one that can't be found) is anywhere else in the list
+			;	- Ask (if there are any extra copies of that filename in any other event) if you want to replace them too
+			;	- If we replace them, then we have to:
+			;		- Regenerate the array using the new (found) path instead of the old one
+			;		- Delete the old array (uninitialize it from _GUIListViewEx
+			;		- Reinitialize the array (check the search functions to see how to do this) to _GUIListViewEx
+			;		- Re-display the events list with the new filename in place
+			;		- Re-open that event one more time, this time with the (found) file
+
+			; Also, this should be an option whether or not you want to find other copies of that file in the list:
+			; 	- Ask if you want to save the "updated" .looper file with the new pathname(s) over the original (broken link) version
+
+			$completeEventList = _GUIListViewEx_ReturnArray($eventListIndex) ; get the entire events list as an array to check other positions for this event
+
+			For $i = 0 to UBound($completeEventList)
+				$currentItem = StringSplit($completeEventList[$i], "|")
+				_ArrayDisplay($currentItem)
+			Next
+
+			; $multipleEvents = _ArraySearch($completeEventList, $currentFile, Default, Default, Default, Default, Default, 5)
+
+			; _ArrayDisplay($completeEventList)
+			; _ArrayDisplay($multipleEvents)
+		EndIf
 	EndIf
 EndFunc
