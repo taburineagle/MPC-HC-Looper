@@ -32,17 +32,9 @@ Func searchEventList()
 		GUICtrlSetFont($eventList, 9, 400, 2, "Segoe UI")
 
 		$currentlySearching = 1 ; set this flag to true to let the program know we're in search mode
-		clearEvents()
 
-		_GUICtrlListView_BeginUpdate($eventList)
+		reloadList($searchResultsList)
 
-		For $i = 0 to UBound($searchResultsList) - 1
-			GUICtrlCreateListViewItem($searchResultsList[$i], $eventList)
-		Next
-
-		_GUICtrlListView_EndUpdate($eventList)
-
-		$eventListIndex = _GUIListViewEx_Init($eventList, $searchResultsList, 0, 0, True, 1) ; for Dragging and Dropping items
 		_GUICtrlListView_SetItemSelected($eventList, -1, False, False) ; for Dragging and Dropping items
 		GUICtrlSetState($searchClearButton, $GUI_ENABLE)
 		GUICtrlSetState($listClearButton, $GUI_HIDE) ; hides the "Clear All" button

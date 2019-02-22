@@ -65,6 +65,5 @@ Func writeCurrentlyPlayingFile()
 		EndIf
 	EndIf
 
-;~ 	_GUICtrlListView_UnRegisterSortCallBack($eventList)
 	Exit
 EndFunc

@@ -49,7 +49,40 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 
 		updateEventOSDInfo($currentPlayingEvent + 1)
 		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0) ; tell the event list that the new event is currently playing
-	Else
-		MsgBox(262144 + 48, "Can't find media file for the event you loaded", "This event's media file can not be found:" & @CRLF & $currentFile & @CRLF & @CRLF & "Media files either need to be in the same directory as the .looper file:" & @CRLF & "          > [example: (path to current .looper file)\MediaFile.mp4] <" & @CRLF & "or in the original directory they were in:" & @CRLF & "         > [example: E:\Media\MediaFile.mp4] <" & @CRLF & "for MPC-HC Looper to be able find them to load them for playback.")
+	Else ; the event is looking for a file that it can't find...
+		$findFile = MsgBox(4 + 48, "Can't find media file for the event you loaded", "The media file for this event can not be found:" & @CRLF & @CRLF & $currentFile & @CRLF & @CRLF & "Would you like to try and locate it elsewhere?")
+
+		If $findFile = 6 Then
+			$currentFilePath = StringTrimLeft($currentFile, StringInStr($currentFile, "\", Default, -1)) ; the base name for the file we're looking for
+			$currentExtension = StringTrimLeft($currentFilePath, StringInStr($currentFilePath, ".", Default, -1)) ; the base extension (to limit results)
+
+			$filePath = FileOpenDialog("Find Missing Media File", @DesktopDir, "Matching (" & $currentFilePath & ")|" & $currentExtension & " files (*." & $currentExtension & ")", Default, $currentFilePath)
+
+			If $filePath <> "" Then
+				$completeEventList = _GUIListViewEx_ReturnArray($eventListIndex) ; get the entire events list as an array to check other positions for this event
+				$completeEventList[$selectedItem] = StringReplace($completeEventList[$selectedItem], $currentFile, $filePath) ; replace the old filename with the new one for current event
+
+				$findFileReplaceAll = MsgBox(4 + 32, "Replace All Missing Links?", "You've chosen to replace the file for this event:" & @CRLF & @CRLF & $currentFile & @CRLF & @CRLF & "With this new path:" & @CRLF & @CRLF & $filePath & @CRLF & @CRLF & "Do you want to replace all of the events that used the old path for this file with the file you just found?")
+
+				If $findFileReplaceAll = 6 Then ; if you want to replace all events that used the old path with the new path, then you clicked Yes
+					For $i = 0 to UBound($completeEventList) - 1
+						$completeEventList[$i] = StringReplace($completeEventList[$i], $currentFile, $filePath) ; replace the old filename with the new one for every one that matches
+					Next
+				EndIf
+
+				reloadList($completeEventList) ; reload the events list again, but with the new filenames in place of the old ones
+				loadEvent($selectedItem) ; load the event we originally asked for again...
+
+				$isModified = 1
+
+				If $findFileReplaceAll = 6 Then
+					askForSave("Do you want to save a .looper file with the new file paths you've just relinked?")
+				Else
+					askForSave("Do you want to save a .looper file with the new file path you've just relinked?")
+				EndIf
+			Else
+				; You cancelled the file-finding process, so we'll just jump back to the events list now.
+			EndIf
+		EndIf
 	EndIf
 EndFunc
