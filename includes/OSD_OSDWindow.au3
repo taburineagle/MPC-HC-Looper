@@ -3,7 +3,7 @@ Func OSDWindow()
 
 	$OSDmodeTF = GUICtrlCreateLabel("", 8, 1, 97, 25)
 	$OSDeventNameTF = GUICtrlCreateLabel($currentEventName, 5, 30, 511, 29, $SS_RIGHT)
-	$OSDeventCounterTF = GUICtrlCreateLabel($currentEventCounter, 164, 1, 352, 25, $SS_RIGHT)
+	$OSDeventCounterTF = GUICtrlCreateLabel($currentEventCounter, 164 - 48, 1, 400, 25, $SS_RIGHT)
 	$OSDcurrentPositionTF = GUICtrlCreateLabel("", 400, 58, 120, 29)
 	$OSDinPositionTF = GUICtrlCreateLabel("", 28, 58, 120, 29)
 	$OSDoutPositionTF = GUICtrlCreateLabel("", 200, 58, 120, 29)

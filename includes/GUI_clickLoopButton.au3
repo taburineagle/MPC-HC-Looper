@@ -41,7 +41,6 @@ Func switchToPlaylist()
 		GUICtrlSetBkColor($loopButton, 0xffa882)
 		switchEditingControls($GUI_DISABLE)
 		clearRandomization()
-		; _GUICtrlListView_SetItemSelected($eventList, -1, false, false) ; clears any selection to force Playlist mode to continue
 	Else
 		displayError("Playlist Mode")
 		switchToLoop() ; if the event list is empty, just switch to OFF mode
@@ -49,7 +48,7 @@ Func switchToPlaylist()
 EndFunc
 
 Func switchToShuffle()
-	If getItemCount() > 0 Then ; if there are items in the playlist to shuffle
+	If getItemCount() > 1 Then ; if there are items in the playlist to shuffle
 		If GUICtrlRead($loopButton) <> "Shuffle Mode" Then ; switch to shuffle mode
 			GUICtrlSetData($loopButton, "Shuffle Mode")
 			GUICtrlSetBkColor($loopButton, 0x85e7f0)
@@ -59,6 +58,7 @@ Func switchToShuffle()
 			switchToLoop() ; if the button already says "Shuffle Mode", then just switch to Loop mode on the current loop item
 		EndIf
 	Else
+		switchToLoop()
 		displayError("Shuffle Mode")
 	EndIf
 EndFunc
@@ -79,10 +79,10 @@ EndFunc
 Func displayError($errorMode)
 	If $errorMode = "Playlist Mode" Then
 		$errorTitle = "Can't switch to Playlist Mode (CTRL-3)... yet"
-		$errorMsg = "You can't switch to Playlist Mode manually (by pressing" & @CRLF & "CTRL-3) unless you have at least one event in the playlist."
+		$errorMsg = "You can't switch to Playlist Mode unless you have at least one" & @CRLF & "event in the events list."
 	ElseIf $errorMode = "Shuffle Mode" Then
 		$errorTitle = "Can't switch to Shuffle Mode (CTRL-4)... yet"
-		$errorMsg = "You can't switch to Shuffle Mode manually (by pressing" & @CRLF & "CTRL-4) unless you have at least one event in the playlist."
+		$errorMsg = "You can't switch to Shuffle Mode unless you have 2 or more events" & @CRLF & "in the events list." & @CRLF & @CRLF & "Looper automatically switches back to Loop Mode if you have" & @CRLF & "only one event in the events list, or if the events list is empty." & @CRLF & @CRLF & "NOTE!  If you don't force Loop mode on opening .looper files," & @CRLF & "and you loaded a new file with only one event, Looper will jump" & @CRLF & "back to Loop Mode because you have less than two events" & @CRLF & "in the events list."
 	EndIf
 
 	Local $mWCoords = WinGetPos($mainWindow)

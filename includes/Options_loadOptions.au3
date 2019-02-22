@@ -3,7 +3,7 @@ Func loadOptions() ; load or hide the options pane
 	loadHotKeys(0) ; disable hotkeys so they don't fotz up typing
 	__MPC_send_message($ghnd_MPC_handle, $CMD_PAUSE, "") ; forces MPC to pause
 
-	$optionsWindow = GUICreate("MPC-HC Looper Options", 411, 486, Default, Default)
+	$optionsWindow = GUICreate("MPC-HC Looper Options", 411, 502, Default, Default)
 
 	$_NOTE1 = GUICtrlCreateLabel("Preview Time (in seconds)", 8, 8, 166, 21)
 	$_NOTE2 = GUICtrlCreateLabel("Slip Amount (in seconds)", 208, 8, 160, 21)
@@ -23,17 +23,18 @@ Func loadOptions() ; load or hide the options pane
 
 	$_NOTE4 = GUICtrlCreateLabel("Extra System Options", 8, 256, 136, 21)
 
-	$disableToolTips = GUICtrlCreateCheckbox(" Disable tool tips on the main Looper panel", 8, 281, 361, 17)
-	$autoloadCheck = GUICtrlCreateCheckbox(" Auto-load the last open .looper file on Looper launch", 8, 305, 361, 17)
-	$allowMICheck = GUICtrlCreateCheckbox(" Allow multiple instances of Looper if MPC-HC allows more", 8, 329, 369, 17)
-	$MI_desc_2 = GUICtrlCreateLabel("than one instance (settable in MPC-HC Options)", 32, 350, 281, 21)
-	$autoPlayDialogsCheck = GUICtrlCreateCheckbox(" Disable auto-playing after exiting Looper dialogs", 8, 373, 305, 17)
-	$autoPlayCheck = GUICtrlCreateCheckbox(" Disable auto-playing first event when opening new .looper file", 8, 397, 393, 17)
-	$askConfCheck = GUICtrlCreateCheckbox(" Disable re-open confirmation when closing MPC-HC on its own", 8, 422, 393, 17)
+	$dontForceLooperModeonOpen = GUICtrlCreateCheckbox(" Keep the current mode setting when opening new files", 8, 281, 361, 17)
+	$disableToolTips = GUICtrlCreateCheckbox(" Disable tool tips on the main Looper panel", 8, 305, 361, 17)
+	$autoloadCheck = GUICtrlCreateCheckbox(" Auto-load the last open .looper file on Looper launch", 8, 329, 361, 17)
+	$allowMICheck = GUICtrlCreateCheckbox(" Allow multiple instances of Looper if MPC-HC allows more", 8, 353, 369, 17)
+	$MI_desc_2 = GUICtrlCreateLabel("than one instance (settable in MPC-HC Options)", 32, 370, 281, 21)
+	$autoPlayDialogsCheck = GUICtrlCreateCheckbox(" Disable auto-playing after exiting Looper dialogs", 8, 394, 305, 17)
+	$autoPlayCheck = GUICtrlCreateCheckbox(" Disable auto-playing first event when opening new .looper file", 8, 418, 393, 17)
+	$askConfCheck = GUICtrlCreateCheckbox(" Disable re-open confirmation when closing MPC-HC on its own", 8, 442, 393, 17)
 
-	$looperAssociateButton = GUICtrlCreateButton("Associate .looper files", 8, 451, 175, 25)
-	$optionsCancelButton = GUICtrlCreateButton("Cancel", 192, 451, 91, 25)
-	$optionsSaveButton = GUICtrlCreateButton("Save Prefs", 288, 451, 107, 25)
+	$looperAssociateButton = GUICtrlCreateButton("Associate .looper files", 8, 468, 175, 25)
+	$optionsCancelButton = GUICtrlCreateButton("Cancel", 192, 468, 91, 25)
+	$optionsSaveButton = GUICtrlCreateButton("Save Prefs", 288, 468, 107, 25)
 
 	Dim $optionsWindow_AccelTable[2][2] = [["{ENTER}", $optionsSaveButton],["{ESC}", $optionsCancelButton]]
 	GUISetAccelerators($optionsWindow_AccelTable)
@@ -41,7 +42,7 @@ Func loadOptions() ; load or hide the options pane
 	#include 'custom\OptionFonts.au3' ; Sets font styles for the options pane
 	#include 'custom\Option-tooltips.au3' ; Adds tooltips to each of the buttons in the option pane of MPC-HC Looper
 
-	Local $entrySettings[12]
+	Local $entrySettings[13]
 	$entrySettings[0] = IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "loopPreviewLength", "")
 	$entrySettings[1] = IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "loopSlipLength", "")
 	$entrySettings[2] = IniRead(@ScriptDir & "\MPCLooper.ini", "StartPos", "startPositionL", "")
@@ -54,6 +55,7 @@ Func loadOptions() ; load or hide the options pane
 	$entrySettings[9] = IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "autoPlayDialogs", "")
 	$entrySettings[10] = IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "MPCConfirm", "")
 	$entrySettings[11] = IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "disableToolTips", "")
+	$entrySettings[12] = IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "dontForceLooperModeonOpen", "")
 
 	If $entrySettings[0] <> "" Then GUICtrlSetState($currentDelayCheck, $GUI_CHECKED)
 	If $entrySettings[1] <> "" Then GUICtrlSetState($currentSlipCheck, $GUI_CHECKED)
@@ -66,7 +68,8 @@ Func loadOptions() ; load or hide the options pane
 	If $entrySettings[8] <> "" Then GUICtrlSetState($allowMICheck, $GUI_CHECKED)
 	If $entrySettings[9] <> "" Then GUICtrlSetState($autoPlayDialogsCheck, $GUI_CHECKED)
 	If $entrySettings[10] <> "" Then GUICtrlSetState($askConfCheck, $GUI_CHECKED)
-	If $entrySettings[11] <> "" Then GUICtrlSetState($disableToolTips,$GUI_CHECKED)
+	If $entrySettings[11] <> "" Then GUICtrlSetState($disableToolTips, $GUI_CHECKED)
+	If $entrySettings[12] <> "" Then GUICtrlSetState($dontForceLooperModeonOpen, $GUI_CHECKED)
 
 	GUISetState(@SW_SHOW)
 	WinSetOnTop($optionsWindow, "", 1)
@@ -196,6 +199,22 @@ Func loadOptions() ; load or hide the options pane
 
 					If $entrySettings[5] <> IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "dockMode", "") Then
 						$currentSavedDialog = $currentSavedDialog & "CLEARED - Current Window Docking setting" & @CRLF
+					EndIf
+				EndIf
+
+				If GUICtrlRead($dontForceLooperModeonOpen) = 1 Then
+					If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "dontForceLooperModeonOpen", "") <> 1 Then
+						IniWrite(@ScriptDir & "\MPCLooper.ini", "Prefs", "dontForceLooperModeonOpen", 1) ; if its nothing, then set the pref
+					EndIf
+
+					If $entrySettings[12] <> IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "dontForceLooperModeonOpen", "") Then
+						$currentSavedDialog = $currentSavedDialog & "SAVED - Keep the current mode setting (don't force Loop Mode) when opening new files" & @CRLF
+					EndIf
+				Else
+					IniDelete(@ScriptDir & "\MPCLooper.ini", "Prefs", "dontForceLooperModeonOpen")
+
+					If $entrySettings[12] <> IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "dontForceLooperModeonOpen", "") Then
+						$currentSavedDialog = $currentSavedDialog & "CLEARED - Keep the current mode setting (don't force Loop Mode) when opening new files" & @CRLF
 					EndIf
 				EndIf
 

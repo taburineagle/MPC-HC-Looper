@@ -18,8 +18,6 @@ Func stripInfoFromName($eventName)
 	Return $eventName
 EndFunc
 
-
-
 Func eventNamePrompt($textToInsert = "")
 	Opt("GUIOnEventMode",0)
 
@@ -31,23 +29,13 @@ Func eventNamePrompt($textToInsert = "")
 	$speedLabel = GUICtrlCreateLabel("What Speed?", 8, 52, 81, 21, $SS_CENTER)
 	$speedTF = GUICtrlCreateEdit("", 8, 74, 81, 22, $ES_AUTOVSCROLL)
 
-	$repeatLabel = GUICtrlCreateLabel("How many repeats? (0 for endless)", 104, 52, 205, 21, $SS_CENTER)
+	$repeatLabel = GUICtrlCreateLabel("How many repeats? (0 = Normal)", 104, 52, 205, 21, $SS_LEFT)
 	$repeatTF = GUICtrlCreateEdit("0", 104, 74, 201, 22, $ES_AUTOVSCROLL)
 
 	$eventDialogOKButton = GUICtrlCreateButton("OK", 8, 112, 142, 25)
 	$eventDialogCancelButton = GUICtrlCreateButton("Cancel", 156, 112, 150, 25)
 
-	GUICtrlSetFont($eventHappenedLabel, 10, 400, 0, "Segoe UI")
- 	GUICtrlSetFont($eventNameTF, 10, 400, 0, "Segoe UI")
-
-	GUICtrlSetFont($speedLabel, 10, 400, 0, "Segoe UI")
-	GUICtrlSetFont($speedTF, 10, 400, 0, "Segoe UI")
-
-	GUICtrlSetFont($repeatLabel, 10, 400, 0, "Segoe UI")
-	GUICtrlSetFont($repeatTF, 10, 400, 0, "Segoe UI")
-
-	GUICtrlSetFont($eventDialogOKButton, 10, 800, 0, "Segoe UI")
-	GUICtrlSetFont($eventDialogCancelButton, 10, 400, 0, "Segoe UI")
+	#include 'custom\eventNamePromptFonts.au3' ; Sets font styles for the options pane
 
 	If $textToInsert = "" Then
 		GUICtrlSetData($eventHappenedLabel, "What do you want to name this event?")

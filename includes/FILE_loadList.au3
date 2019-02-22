@@ -52,9 +52,14 @@ Func loadList($fileToOpen = "") ; load a .looper file into the program
 
 		If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "dontForceLooperModeonOpen", 0) <> 0 Then ; we're in a different mode, and we're fine with that...
 			If GUICtrlRead($loopButton) = "Shuffle Mode" Then ; if we're in shuffle mode, special consideration needs to be taken...
-				clearRandomization() ; ... to clear the old randomized list before starting the new one, and...
-				createRandomList() ; ... to make a new one before starting playback
-				$specialConsideration = 1 ; set this to one to ignore the next step below (auto playback always starts in Shuffle mode)
+				If getItemCount() > 1 Then
+					clearRandomization() ; ... to clear the old randomized list before starting the new one, and...
+					createRandomList() ; ... to make a new one before starting playback
+					$specialConsideration = 1 ; set this to one to ignore the next step below (auto playback always starts in Shuffle mode)
+				Else
+					switchToLoop()
+					displayError("Shuffle Mode")
+				EndIf
 			EndIf
 		EndIf
 

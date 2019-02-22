@@ -11,6 +11,7 @@ GUICtrlSetTip($saveLoopCheck, "If you enable this checkbox, the current Loop Mod
 GUICtrlSetTip($saveAOTCheck, "If you enable this checkbox, the current Always On Top setting" & @CRLF & "will be saved as the default setting for new Looper sessions")
 GUICtrlSetTip($saveDockCheck, "If you enable this checkbox, the current window docking setting" & @CRLF & "will be saved as the default docking setting for new Looper sessions")
 
+GUICtrlSetTip($dontForceLooperModeonOpen, "If you enable this checkbox, loading new files will not switch" & @CRLF & "Looper back to Loop Mode once they open." & @CRLF & @CRLF & "For example, if you switch to Playlist mode and open" & @CRLF & "another .looper file, that file will also then open in Playlist mode.")
 GUICtrlSetTip($disableToolTips, "If you enable this checkbox, tool tips will not display on" & @CRLF & "the main Looper panel when you hover over different things - " & @CRLF & "tool tips will always display in the Options panel")
 GUICtrlSetTip($autoloadCheck, "If you enable this checkbox, the last open .looper file" & @CRLF & "when you quit out of Looper will load automatically" & @CRLF & "when you start a new session")
 GUICtrlSetTip($allowMICheck, "If you enable this checkbox, you can run multiple" & @CRLF & "instances of Looper if MPC-HC allows multiple" & @CRLF & "instances of itself")

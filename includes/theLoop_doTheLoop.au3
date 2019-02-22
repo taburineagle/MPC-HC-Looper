@@ -56,19 +56,27 @@ Func doTheLoop()
 							loadPrevNextEvent(1) ; if the count of loops is over, then go to the next event
 						EndIf
 					ElseIf GUICtrlRead($loopButton) = "Shuffle Mode" Then
-						$nextEvent = $randomPlayOrder[$randomPlayOrder[UBound($randomPlayOrder) - 1]]
-						loadEvent($nextEvent)
+						If $loopRepeats[1] < $loopRepeats[0] Then
+							__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, (TimeStringToNumber($currentInPoint))) ; set it to the IN point, a.k.a. LOOP IT
 
-						Sleep(200)
-
-						If UBound($randomPlayOrder) <> 0 Then
-							If $randomPlayOrder[UBound($randomPlayOrder) - 1] = (getItemCount() - 1) Then
-								$randomPlayOrder[UBound($randomPlayOrder) - 1] = 0
-							Else
-								$randomPlayOrder[UBound($randomPlayOrder) - 1] += 1
+							If $loopRepeats[0] <> 0 Then
+								$loopRepeats[1] = $loopRepeats[1] + 1
 							EndIf
 						Else
-							; the array has been deleted (in another step), so gracefully bow out of that loop
+							$nextEvent = $randomPlayOrder[$randomPlayOrder[UBound($randomPlayOrder) - 1]]
+							loadEvent($nextEvent)
+
+							Sleep(200)
+
+							If UBound($randomPlayOrder) <> 0 Then
+								If $randomPlayOrder[UBound($randomPlayOrder) - 1] = (getItemCount() - 1) Then
+									$randomPlayOrder[UBound($randomPlayOrder) - 1] = 0
+								Else
+									$randomPlayOrder[UBound($randomPlayOrder) - 1] += 1
+								EndIf
+							Else
+								; the array has been deleted (in another step), so gracefully bow out of that loop
+							EndIf
 						EndIf
 					EndIf
 

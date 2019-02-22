@@ -35,6 +35,11 @@ Func searchEventList()
 
 		reloadList($searchResultsList)
 
+		If GUICtrlRead($loopButton) = "Shuffle Mode" Then ; if we're in shuffle mode, special consideration needs to be taken...
+			clearRandomization() ; ... to clear the old randomized list before starting the new one, and...
+			createRandomList() ; ... to make a new one before starting playback
+		EndIf
+
 		_GUICtrlListView_SetItemSelected($eventList, -1, False, False) ; for Dragging and Dropping items
 		GUICtrlSetState($searchClearButton, $GUI_ENABLE)
 		GUICtrlSetState($listClearButton, $GUI_HIDE) ; hides the "Clear All" button

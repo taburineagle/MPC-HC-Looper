@@ -18,6 +18,7 @@ GUICtrlSetFont($saveLoopCheck, 10, 400, 0, "Segoe UI")
 GUICtrlSetFont($saveAOTCheck, 10, 400, 0, "Segoe UI")
 GUICtrlSetFont($saveDockCheck, 10, 400, 0, "Segoe UI")
 
+GUICtrlSetFont($dontForceLooperModeonOpen, 10, 400, 0, "Segoe UI")
 GUICtrlSetFont($disableToolTips, 10, 400, 0, "Segoe UI")
 GUICtrlSetFont($autoloadCheck, 10, 400, 0, "Segoe UI")
 GUICtrlSetFont($autoPlayCheck, 10, 400, 0, "Segoe UI")

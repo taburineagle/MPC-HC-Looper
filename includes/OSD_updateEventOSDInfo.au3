@@ -12,7 +12,7 @@ Func updateEventOSDInfo($eventToLoad)
 			$currentEventCounter = "Playing event " & $eventToLoad & " out of " & $numOfEvents & " "
 
 			If $loopRepeats[0] > 0 Then
-				If GUICtrlRead($loopButton) = "Playlist Mode" Then
+				If GUICtrlRead($loopButton) = "Playlist Mode" Or GUICtrlRead($loopButton) = "Shuffle Mode" Then
 					$currentEventCounter = $currentEventCounter & "[Repeats: " & $loopRepeats[1] & " / " & $loopRepeats[0] & "] "
 				EndIf
 			EndIf

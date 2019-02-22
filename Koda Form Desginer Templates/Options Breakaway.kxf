@@ -4,7 +4,7 @@
 		<property name="Left" vt="Int16">1202</property>
 		<property name="Top" vt="Int8">46</property>
 		<property name="Width" vt="Int16">426</property>
-		<property name="Height" vt="Int16">520</property>
+		<property name="Height" vt="Int16">544</property>
 		<property name="Caption" vt="String">MPC-HC Looper Options</property>
 		<property name="Color" vt="Ident">clBtnFace</property>
 		<property name="Font.Charset" vt="Ident">DEFAULT_CHARSET</property>
@@ -75,7 +75,7 @@
 		<object type="TAButton" name="looperAssociateButton">
 			<properties>
 				<property name="Left" vt="Int8">8</property>
-				<property name="Top" vt="Int16">450</property>
+				<property name="Top" vt="Int16">474</property>
 				<property name="Width" vt="Int16">175</property>
 				<property name="Height" vt="Int8">25</property>
 				<property name="Hint" vt="String">Associate .looper files with Windows Explorer, so double clicking on a .looper file will open it in MPC-HC Looper</property>
@@ -97,7 +97,7 @@
 		<object type="TACheckbox" name="allowMICheck">
 			<properties>
 				<property name="Left" vt="Int8">8</property>
-				<property name="Top" vt="Int16">329</property>
+				<property name="Top" vt="Int16">353</property>
 				<property name="Width" vt="Int16">369</property>
 				<property name="Height" vt="Int8">17</property>
 				<property name="Caption" vt="String"> Allow multiple instances of Looper if MPC-HC allows more</property>
@@ -117,7 +117,7 @@
 		<object type="TALabel" name="MI_desc_2">
 			<properties>
 				<property name="Left" vt="Int8">32</property>
-				<property name="Top" vt="Int16">350</property>
+				<property name="Top" vt="Int16">374</property>
 				<property name="Width" vt="Int16">281</property>
 				<property name="Height" vt="Int8">21</property>
 				<property name="Caption" vt="String">than one instance (settable in MPC-HC Options)</property>
@@ -138,7 +138,7 @@
 		<object type="TACheckbox" name="askConfCheck">
 			<properties>
 				<property name="Left" vt="Int8">8</property>
-				<property name="Top" vt="Int16">422</property>
+				<property name="Top" vt="Int16">446</property>
 				<property name="Width" vt="Int16">393</property>
 				<property name="Height" vt="Int8">17</property>
 				<property name="Caption" vt="String"> Disable re-open confirmation when closing MPC-HC on it's own</property>
@@ -158,7 +158,7 @@
 		<object type="TACheckbox" name="autoPlayDialogsCheck">
 			<properties>
 				<property name="Left" vt="Int8">8</property>
-				<property name="Top" vt="Int16">373</property>
+				<property name="Top" vt="Int16">397</property>
 				<property name="Width" vt="Int16">305</property>
 				<property name="Height" vt="Int8">17</property>
 				<property name="Caption" vt="String"> Disable auto-playing after exiting Looper dialogs</property>
@@ -178,7 +178,7 @@
 		<object type="TAButton" name="optionsSaveButton">
 			<properties>
 				<property name="Left" vt="Int16">288</property>
-				<property name="Top" vt="Int16">450</property>
+				<property name="Top" vt="Int16">474</property>
 				<property name="Width" vt="Int8">107</property>
 				<property name="Height" vt="Int8">25</property>
 				<property name="Caption" vt="String">Save Prefs</property>
@@ -199,7 +199,7 @@
 		<object type="TAButton" name="optionsCancelButton">
 			<properties>
 				<property name="Left" vt="Int16">192</property>
-				<property name="Top" vt="Int16">450</property>
+				<property name="Top" vt="Int16">474</property>
 				<property name="Width" vt="Int8">91</property>
 				<property name="Height" vt="Int8">25</property>
 				<property name="Caption" vt="String">Cancel</property>
@@ -241,7 +241,7 @@
 		<object type="TACheckbox" name="autoPlayCheck">
 			<properties>
 				<property name="Left" vt="Int8">8</property>
-				<property name="Top" vt="Int16">397</property>
+				<property name="Top" vt="Int16">421</property>
 				<property name="Width" vt="Int16">393</property>
 				<property name="Height" vt="Int8">17</property>
 				<property name="Caption" vt="String"> Disable auto-playing first event when opening new .looper file</property>
@@ -261,7 +261,7 @@
 		<object type="TACheckbox" name="autoloadCheck">
 			<properties>
 				<property name="Left" vt="Int8">8</property>
-				<property name="Top" vt="Int16">305</property>
+				<property name="Top" vt="Int16">329</property>
 				<property name="Width" vt="Int16">361</property>
 				<property name="Height" vt="Int8">17</property>
 				<property name="Caption" vt="String"> Auto-load the last open .looper file on Looper launch</property>
@@ -506,7 +506,7 @@
 		<object type="TACheckbox" name="disableToolTips">
 			<properties>
 				<property name="Left" vt="Int8">8</property>
-				<property name="Top" vt="Int16">281</property>
+				<property name="Top" vt="Int16">305</property>
 				<property name="Width" vt="Int16">361</property>
 				<property name="Height" vt="Int8">17</property>
 				<property name="Caption" vt="String"> Disable tool tips on the main Looper panel</property>
@@ -517,6 +517,26 @@
 				<property name="Font.Style" vt="Set"/>
 				<property name="ParentFont" vt="False">False</property>
 				<property name="TabOrder" vt="Int8">23</property>
+				<property name="CtrlStyle" vt="Int32">1342242819</property>
+				<property name="CtrlExStyle" vt="Int8">0</property>
+				<property name="Resizing" vt="Set">DockHeight</property>
+			</properties>
+			<components/>
+		</object>
+		<object type="TACheckbox" name="dontForceLooperModeonOpen">
+			<properties>
+				<property name="Left" vt="Int8">8</property>
+				<property name="Top" vt="Int16">281</property>
+				<property name="Width" vt="Int16">361</property>
+				<property name="Height" vt="Int8">17</property>
+				<property name="Caption" vt="String"> Keep the current mode setting when opening new files</property>
+				<property name="Font.Charset" vt="Ident">ANSI_CHARSET</property>
+				<property name="Font.Color" vt="Ident">clWindowText</property>
+				<property name="Font.Height" vt="Int8">-13</property>
+				<property name="Font.Name" vt="String">Segoe UI</property>
+				<property name="Font.Style" vt="Set"/>
+				<property name="ParentFont" vt="False">False</property>
+				<property name="TabOrder" vt="Int8">24</property>
 				<property name="CtrlStyle" vt="Int32">1342242819</property>
 				<property name="CtrlExStyle" vt="Int8">0</property>
 				<property name="Resizing" vt="Set">DockHeight</property>

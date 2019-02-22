@@ -1,6 +1,6 @@
 Func updateStatusText()
 	If $displayTimer <> "" Then
-		If Mod($displayTimer, 100) = 0 Then
+		If Mod($displayTimer, 350) = 0 Then
 			If $displayMessage = 2 Then ToolTip("")
 
 			$displayMessage = 0
