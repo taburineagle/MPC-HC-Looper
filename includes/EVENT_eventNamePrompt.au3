@@ -35,7 +35,7 @@ Func eventNamePrompt($textToInsert = "")
 	$eventDialogOKButton = GUICtrlCreateButton("OK", 8, 112, 142, 25)
 	$eventDialogCancelButton = GUICtrlCreateButton("Cancel", 156, 112, 150, 25)
 
-	#include 'custom\eventNamePromptFonts.au3' ; Sets font styles for the options pane
+	#include 'custom\eventNamePromptFonts.au3' ; Sets font styles for the add/modify event name prompt
 
 	If $textToInsert = "" Then
 		GUICtrlSetData($eventHappenedLabel, "What do you want to name this event?")

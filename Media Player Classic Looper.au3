@@ -2,7 +2,7 @@
 #AutoIt3Wrapper_Icon=MPC Icons.ico
 #AutoIt3Wrapper_Res_Comment=MPC-HC Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=Media Player Classic Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2.22.19.2
+#AutoIt3Wrapper_Res_Fileversion=2.23.19.5
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=2014-2019 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
@@ -341,21 +341,20 @@ _GUIListViewEx_MsgRegister() ; for Dragging and Dropping items
 #include 'includes\SYS_linkMPC.au3'
 linkMPC() ; link Looper to an MPC-HC instance
 
-GUISetState(@SW_SHOW) ; show the Looper window
-
 If $loadDefaults = True Then ; If you hold SHIFT down at startup, it loads the default values for sizing
 	$loopPreviewLength = 0.25 ; The length of the preview window for IN/OUT
 	$loopSlipLength = 0.05 ; The trim slip length
 
-	switchToLoop()
+	switchToLoop() ; if we're in defaults, then switch to Loop mode
 Else ; You have preferences saved, and you didn't default to factory settings, so load the settings from the INI file
 	setDockingModeDefaults()
 	loadWindowSizeDefaults()
 	setAlwaysOnTopDefaults()
-	setLoopModeDefaults()
 EndIf
 
-If $currentLooperFile <> "" Then
+GUISetState(@SW_SHOW) ; show the Looper window
+
+If $currentLooperFile <> "" Then ; if $currentLooperFile is defined, let's try opening that
 	loadList($currentLooperFile)
 
 	If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "autoplayFirstEvent", "") <> 1 Then
@@ -363,6 +362,12 @@ If $currentLooperFile <> "" Then
 			loadEvent($eventToPlay)
 		EndIf
 	EndIf
+Else ;if $currentLooperFile is not defined, let's see if there's a file to open anyway...
+	checkLoadingNewFile() ; check to see if there's a file to open (via Explorer) - if there is, then loadList() it
+EndIf
+
+If $loadDefaults <> True Then ; we look at the Loop mode *last*, because we have to load a .looper file first before switching
+	setLoopModeDefaults() ; if we have a Loop mode default that's not standard, let's try switching it now...
 EndIf
 
 ; **************************************************************************
