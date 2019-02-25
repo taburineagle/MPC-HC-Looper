@@ -1,9 +1,12 @@
 Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the event list
+	If _GUICtrlListView_GetItemText($eventList, $currentPlayingEvent, 0) = "▶" Then
+		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, $currentPlayingEventPos, 0) ; switch the current playing event # back to it's original state
+	EndIf
+
 	$currentFile = _GUICtrlListView_GetItemText($eventList, $selectedItem, 5)
 	$fileToLoad = findFileExists($currentFile, $currentLooperFile) ; finds the path to the file, either in it's original dir, or relative to the looper file
 
 	If $fileToLoad <> -1 Then
-		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, $currentPlayingEventPos, 0) ; switch the current playing event # back to it's original state
 		$currentPlayingEventPos = _GUICtrlListView_GetItemText($eventList, $selectedItem, 0) ; get the current playing event # from the new event to load
 
 		GUICtrlSetData($inTF, _GUICtrlListView_GetItemText($eventList, $selectedItem, 2))
@@ -50,6 +53,7 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 		updateEventOSDInfo($currentPlayingEvent + 1)
 		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0) ; tell the event list that the new event is currently playing
 	Else ; the event is looking for a file that it can't find...
+		__MPC_send_message($ghnd_MPC_handle, $CMD_PAUSE, "") ; forces MPC to pause
 		$findFile = MsgBox(4 + 48, "Can't find media file for the event you loaded", "The media file for this event can not be found:" & @CRLF & @CRLF & $currentFile & @CRLF & @CRLF & "Would you like to try and locate it elsewhere?")
 
 		If $findFile = 6 Then

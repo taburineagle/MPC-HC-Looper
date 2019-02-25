@@ -1382,6 +1382,11 @@ Func _GUIListViewEx_WM_NOTIFY_Handler($hWnd, $iMsg, $wParam, $lParam)
 				Else
 					; If ListView sortable
 					If IsArray($aGLVEx_Data[$iLV_Index][4]) Then
+						; ZAG added line - 2-24-19 - put the correct # back in the event order column before sorting
+						If _GUICtrlListView_GetItemText($eventList, $currentPlayingEvent, 0) = "▶" Then
+							_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, $currentPlayingEventPos, 0)
+						EndIf
+
 						; Load array
 						$aGLVEx_SrcArray = $aGLVEx_Data[$iLV_Index][2]
 						; Load current ListView sort state array

@@ -1,9 +1,9 @@
 Func loadPrevEventButton()
-		loadPrevNextEvent(-1)
+	loadPrevNextEvent(-1)
 EndFunc
 
 Func loadNextEventButton()
-		loadPrevNextEvent(1)
+	loadPrevNextEvent(1)
 EndFunc
 
 Func loadPrevNextEvent($nextOrPrev)
@@ -23,7 +23,7 @@ Func loadPrevNextEvent($nextOrPrev)
 			_GUICtrlListView_SetItemSelected($eventList, -1, false, false) ; clears any selection to force Playlist mode to continue
 		ElseIf $selectedItems[0] > 1 Then
 			For $i = 1 to $selectedItems[0]
-				While _ArraySearch($selectedItems, $nextEventToPlay) = -1 ; if $nextEventToPlay is not part of the current array, find the closest event...
+				While _ArraySearch($selectedItems, $nextEventToPlay, 1) = -1 ; if $nextEventToPlay is not part of the current array, find the closest event...
 					If $nextEventToPlay < $selectedItems[1]  Or $nextEventToPlay > $selectedItems[$selectedItems[0]] Then ; we're out of bounds
 						If $nextOrPrev = 1 Then ; if we're advancing to the next event
 							$nextEventToPlay = $selectedItems[1] ; jump back to the beginning of the selected items
