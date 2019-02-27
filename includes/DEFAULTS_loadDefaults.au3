@@ -27,15 +27,14 @@ Func setAlwaysOnTopDefaults()
 EndFunc
 
 Func setLoopModeDefaults()
-	If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "loopButtonMode", "Loop Mode") = "OFF" Then
-		switchToOff()
-	ElseIf IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "loopButtonMode", "Loop Mode") = "Loop Mode" Then
-		switchToLoop()
-	ElseIf IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "loopButtonMode", "Loop Mode") = "Playlist Mode" Then
-		switchToPlaylist()
-	ElseIf IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "loopButtonMode", "Loop Mode") = "Shuffle Mode" Then
-		switchToShuffle()
-	Else ; this is a catch-all, just in case we've gotten here and exhausted all other choices - or if someone purposely jumbled the INI file... Jake...
-		switchToLoop()
-	EndIf
+	Switch IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "loopButtonMode", "Loop Mode")
+		Case "OFF"
+			switchToOff()
+		Case "Playlist Mode"
+			switchPlaylist()
+		Case "Switch Mode"
+			switchToShuffle()
+		Case Else
+			switchToOff()
+	EndSwitch
 EndFunc
