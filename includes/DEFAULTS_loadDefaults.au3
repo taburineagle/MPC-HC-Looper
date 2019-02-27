@@ -31,8 +31,8 @@ Func setLoopModeDefaults()
 		Case "OFF"
 			switchToOff()
 		Case "Playlist Mode"
-			switchPlaylist()
-		Case "Switch Mode"
+			switchToPlaylist()
+		Case "Shuffle Mode"
 			switchToShuffle()
 		Case Else
 			switchToLoop()
