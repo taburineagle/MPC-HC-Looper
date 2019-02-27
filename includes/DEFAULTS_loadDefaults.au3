@@ -35,6 +35,6 @@ Func setLoopModeDefaults()
 		Case "Switch Mode"
 			switchToShuffle()
 		Case Else
-			switchToOff()
+			switchToLoop()
 	EndSwitch
 EndFunc
