@@ -1,4 +1,6 @@
 Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the event list
+
+
 	If _GUICtrlListView_GetItemText($eventList, $currentPlayingEvent, 0) = "▶" Then
 		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, $currentPlayingEventPos, 0) ; switch the current playing event # back to it's original state
 	EndIf
@@ -16,20 +18,23 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 
 		If $fileToLoad <> $currentLoadedFile Then
 			__MPC_send_message($ghnd_MPC_handle, $CMD_OPENFILE, $fileToLoad)
+
 			While $isLoaded <> 2
 				; wait until the file loads
 			WEnd
 
-			__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, TimeStringToNumber(GUICtrlRead($inTF)) - 0.5)
-			__MPC_send_message($ghnd_MPC_handle, $CMD_STOP, "")
-			Sleep(200)
-
 			$currentSpeed = 100 ; reset the current speed to 100, that way if the speed of the new event is slower, it forces it to re-slow...
 			$currentLoadedFile = $fileToLoad
+
+			__MPC_send_message($ghnd_MPC_handle, $CMD_STOP, "") ; forces MPC to stop (helps speed setting)
 		EndIf
 
-		__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, TimeStringToNumber(GUICtrlRead($inTF)) - 0.5)
+		$currentPlayingEvent = $selectedItem
+		updateEventOSDInfo($currentPlayingEvent + 1)
+		_GUICtrlListView_EnsureVisible($eventList, $currentPlayingEvent, True)
+		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0) ; tell the event list that the new event is currently playing
 
+		; CHECK THE SPEED SETTING FOR THIS EVENT AND SET IT IN MPC-HC
 		$speedSetting = checkNameSpeedSetting($currentName)
 
 		$loopRepeats[0] = checkNameRepeatSetting($currentName) ; the number of repeats for the current loop
@@ -40,18 +45,11 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 				setSpeed($speedSetting)
 			EndIf
 		Else
-			If $currentSpeed <> 100 Then
-				setSpeed(100)
-			EndIf
+			setSpeed(100)
 		EndIf
 
-		__MPC_send_message($ghnd_MPC_handle, $CMD_PLAY, "") ; forces MPC to pause
-
-		$currentPlayingEvent = $selectedItem
-		_GUICtrlListView_EnsureVisible($eventList, $currentPlayingEvent, True)
-
-		updateEventOSDInfo($currentPlayingEvent + 1)
-		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0) ; tell the event list that the new event is currently playing
+		__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, TimeStringToNumber(GUICtrlRead($inTF)) - 0.5) ; seeks to the current IN point
+		__MPC_send_message($ghnd_MPC_handle, $CMD_PLAY, "") ; tells MPC-HC to play
 	Else ; the event is looking for a file that it can't find...
 		__MPC_send_message($ghnd_MPC_handle, $CMD_PAUSE, "") ; forces MPC to pause
 		$findFile = MsgBox(4 + 48, "Can't find media file for the event you loaded", "The media file for this event can not be found:" & @CRLF & @CRLF & $currentFile & @CRLF & @CRLF & "Would you like to try and locate it elsewhere?")

@@ -1,3 +1,7 @@
+Func dummyAction()
+
+EndFunc
+
 Func hotKeyPressed() ; when you press a hotkey
 	Switch @HotKeyPressed
 		Case "i"
@@ -55,9 +59,15 @@ Func hotKeyPressed() ; when you press a hotkey
 			makeMPCActive()
 			__MPC_send_message($ghnd_MPC_handle, $CMD_TOGGLEFULLSCREEN, "")
 		Case "^{PGUP}"
+			HotKeySet("^{PGUP}", "dummyAction") ; block the PG UP hotkey to delay the next event switch (slow it down a bit)
 			If getItemCount() > 0 Then loadPrevNextEvent(-1)
+			Sleep(75)
+			HotKeySet("^{PGUP}", "hotKeyPressed")
 		Case "^{PGDN}"
+			HotKeySet("^{PGDN}", "dummyAction") ; block the PG DN hotkey to delay the next event switch (slow it down a bit)
 			If getItemCount() > 0 Then loadPrevNextEvent(1)
+			Sleep(75)
+			HotKeySet("^{PGDN}", "hotKeyPressed")
 		Case "^{UP}"
 			setspeed($currentSpeed + 10)
 		Case "^{DOWN}"

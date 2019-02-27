@@ -90,17 +90,25 @@ Func deleteEvent() ; delete an event in the event list
 
 			setModified()
 
-			If $currentPlayingEvent = getItemCount() Then ; if we're playing the last event in the list currently
-				loadEvent($currentPlayingEvent - 1) ; load the penultimate event
-			Else
-				loadEvent($currentPlayingEvent) ; if we're not, then just play the event after the one you deleted
+			If GUICtrlRead($loopButton) = "Shuffle Mode" Then ; if we're in Shuffle mode, we need to re-randomize the playlist order
+				clearRandomization() ; ... to clear the old randomized list before starting the new one, and...
+				createRandomList() ; ... to make a new one before starting playback
+			Else ; if we're not in Shuffle mode, just re-load the last available event for playback
+				If $currentPlayingEvent = getItemCount() Then ; if we're playing the last event in the list currently
+					loadEvent($currentPlayingEvent - 1) ; load the penultimate event
+				Else
+					loadEvent($currentPlayingEvent) ; if we're not, then just play the event after the one you deleted
+				EndIf
 			EndIf
 
 			_GUICtrlListView_SetItemSelected($eventList, $currentPlayingEvent, true, true)
 		EndIf
 	EndIf
 
-	initializeEventChange($GUI_ENABLE)
+	If GUICtrlRead($loopButton) = "Loop Mode" Or GUICtrlRead($loopButton) = "OFF" Then
+		initializeEventChange($GUI_ENABLE)
+	EndIf
+
 	GUICtrlSetState($eventList, $GUI_ENABLE)
 EndFunc
 

@@ -24,6 +24,5 @@ Func initializeEventChange($onOrOff)
 		GUICtrlSetState($listDeleteButton, $onOrOff)
 	EndIf
 
-	GUICtrlSetState($listLoadButton, $onOrOff)
 	GUICtrlSetState($listAddButton, $onOrOff)
 EndFunc
