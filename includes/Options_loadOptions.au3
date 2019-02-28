@@ -84,7 +84,7 @@ Func loadOptions() ; load or hide the options pane
 			Case $optionsSaveButton
 				$currentSavedDialog = ""
 
-				If isAcceptable(GUICtrlRead($prevDelayTF)) and isAcceptable(GUICtrlRead($slipTF)) Then
+				If isAcceptableNumber(GUICtrlRead($prevDelayTF)) and isAcceptableNumber(GUICtrlRead($slipTF)) Then
 					If $loopPreviewLength <> Number(GUICtrlRead($prevDelayTF)) Or $loopSlipLength <> Number(GUICtrlRead($slipTF)) Then
 						$currentSavedDialog = $currentSavedDialog & "You've made the following changes to the current Looper session:"  & @CRLF
 
@@ -100,6 +100,19 @@ Func loadOptions() ; load or hide the options pane
 
 						$currentSavedDialog = $currentSavedDialog & @CRLF
 					EndIf
+				Else ; if we get invalid values for either of the top 2 fields, show an error...
+					$errorString = "Invalid values entered for these fields:" & @CRLF & @CRLF
+
+					If Not isAcceptableNumber(GUICtrlRead($prevDelayTF)) Then
+						$errorString = $errorString & " - Preview Time (in Seconds)" & @CRLF
+					EndIf
+
+					If Not isAcceptableNumber(GUICtrlRead($slipTF)) Then
+						$errorString = $errorString & " - Slip Amount (in Seconds)" & @CRLF
+					EndIf
+
+					$errorString = $errorString & @CRLF & "Please only enter valid numbers in the Preview Time and Slip Amount fields (at the top of the Options panel), or the new values won't be saved."
+					MsgBox(262144 + 16, "Invalid Number Error!", $errorString)
 				EndIf
 
 				$currentSavedDialog = $currentSavedDialog & "You've made the following changes to the default settings:" & @CRLF

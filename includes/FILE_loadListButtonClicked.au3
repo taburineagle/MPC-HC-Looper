@@ -1,3 +1,0 @@
-Func loadListButtonClicked()
-	loadList()
-EndFunc

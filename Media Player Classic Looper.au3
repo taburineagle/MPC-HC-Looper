@@ -2,7 +2,7 @@
 #AutoIt3Wrapper_Icon=MPC Icons.ico
 #AutoIt3Wrapper_Res_Comment=MPC-HC Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=Media Player Classic Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2019.2.26.5
+#AutoIt3Wrapper_Res_Fileversion=2019.2.28.1
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=© 2014-2019 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
@@ -245,7 +245,7 @@ $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Ele
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
 
 ; The name of the program - auto-generated for beta releases, uncomment to release a specific version!
-$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [2-26-19] RC", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progTitle = GUICtrlCreateLabel("Media Player Classic Looper [2-28-19] RC", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
 ; $progTitle = GUICtrlCreateLabel("Media Player Classic Looper [" & @MON & "-" & @MDAY & "-" & StringRight(@YEAR, 2) & "] RC", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
 
 $progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-19 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
@@ -333,13 +333,19 @@ Next
 _GUIListViewEx_MsgRegister() ; for Dragging and Dropping items
 
 #include 'includes\SYS_WM_GETMINMAXINFO.au3' ; forces the window to stay the same width
-#include 'includes\DEFAULTS_loadDefaults.au3' ; all of the default loading code
+
+#include 'includes\DEFAULTS_loadWindowSizeDefaults.au3' ; procedure for setting opening window size dimensions when launching
+#include 'includes\DEFAULTS_setAlwaysOnTopDefaults.au3' ; procedure for setting always on top when launching
+#include 'includes\DEFAULTS_setDockingModeDefaults.au3' ; procedure for setting docking mode when launching
+#include 'includes\DEFAULTS_setLoopModeDefaults.au3' ; procedure for setting loop mode when launching
 
 ; **************************************************************************
 ; ****** MEDIA PLAYER CLASSIC TIES TO THIS PROGRAM *************************
 ; **************************************************************************
 #include 'includes\SYS_linkMPC.au3'
 linkMPC() ; link Looper to an MPC-HC instance
+
+GUISetState(@SW_SHOW) ; show the Looper window
 
 If $loadDefaults = True Then ; If you hold SHIFT down at startup, it loads the default values for sizing
 	$loopPreviewLength = 0.25 ; The length of the preview window for IN/OUT
@@ -351,8 +357,6 @@ Else ; You have preferences saved, and you didn't default to factory settings, s
 	loadWindowSizeDefaults()
 	setAlwaysOnTopDefaults()
 EndIf
-
-GUISetState(@SW_SHOW) ; show the Looper window
 
 If $currentLooperFile <> "" Then ; if $currentLooperFile is defined, let's try opening that
 	loadList($currentLooperFile)
@@ -457,10 +461,20 @@ WEnd
 #include 'includes\GUI_displayStatusMsg.au3' ; shows a status message in the status area
 #include 'includes\GUI_switchCurrentandRemaining.au3' ; switches between current and remaining time display
 #include 'includes\GUI_switchCurrentEventandTotalEvents.au3' ; switches between showing the current playback event or a tally of all of them
-#include 'includes\GUI_clickDockingButton.au3' ; What happens when you click the "Docking" button
+#include 'includes\GUI_clickDockingButtons.au3' ; What happens when you click the left, right or middle "Docking" buttons
+
 #include 'includes\GUI_clickLoopButton.au3' ; what happens when you click the "Loop Mode" button
-#include 'includes\GUI_clickOSDButton.au3' ; what happens when you click the OSD button
+#include 'includes\GUI_switchToOff.au3' ; switch Looper to OFF mode
+#include 'includes\GUI_switchToLoop.au3' ; switch Looper to LOOP mode
+
+#include 'includes\GUI_displayError.au3' ; show an error (if you can't jump to Playlist or Shuffle modes)
+#include 'includes\GUI_switchToPlaylist.au3' ; switch Looper to PLAYLIST mode
+#include 'includes\GUI_switchToShuffle.au3' ; switch Looper to SHUFFLE mode
+
 #include 'includes\GUI_createRandomList.au3' ; create a random list for the shuffle mode
+#include 'includes\GUI_clearRandomization.au3' ; clear any randomization in the Shuffle playlist
+
+#include 'includes\GUI_clickOSDButton.au3' ; what happens when you click the OSD button
 #include 'includes\GUI_switchEditingControls.au3' ; turns certain controls off or on based on Loop Mode
 #include 'includes\GUI_switchModifyDelete.au3' ; if there's a selection, and it's the current file, then enable/disable Modify/Delete
 #include 'includes\GUI_setAlwaysOnTop.au3' ; what happens when you click on the "Always on Top" button
@@ -469,6 +483,7 @@ WEnd
 #include 'includes\GUI_restoreWindow.au3' ; makes the window normal size again
 
 #include 'includes\MAIN_Uninitialize.au3' ; quitting procedure
+#include 'includes\MAIN_writeCurrentlyPlayingFile.au3' ; if you choose to exit Looper and keep the current .looper file for the next session, this writes that INI value
 
 ; **************************************************************************
 ; ******* SPEED SETTING HANDLERS *******************************************
@@ -493,7 +508,7 @@ WEnd
 ; ******* OPTIONS PANE HANDLERS ********************************************
 ; **************************************************************************
 #include 'includes\Options_loadOptions.au3' ; loads the options pane and waits for results
-#include 'includes\Options_isAcceptable.au3' ; checks to see if the numbers in the text fields are actually numbers (and don't have text in them)
+#include 'includes\Options_isAcceptableNumber.au3' ; checks to see if the numbers in the text fields are actually numbers (and don't have text in them)
 
 ; **************************************************************************
 ; ******* MPC-HC HANDLERS **************************************************
@@ -512,7 +527,6 @@ WEnd
 ; **************************************************************************
 ; ******* FILE HANDLING PROCEDURES *****************************************
 ; **************************************************************************
-#include 'includes\FILE_loadListButtonClicked.au3' ; when you click the Load List button
 #include 'includes\FILE_loadList.au3' ; loads a .looper file into MPC-HC Looper and loads the first event
 #include 'includes\FILE_askForSave.au3' ; asks if you want to save before doing something (quitting, loading a new file, etc.)
 #include 'includes\FILE_saveList.au3' ; saves a .looper file from the current events list
@@ -521,6 +535,7 @@ WEnd
 ; ******* IN AND OUT POINT HANDLERS ****************************************
 ; **************************************************************************
 #include 'includes\EDIT_setInPoint.au3' ; sets the in point to the current playback position
+#include 'includes\EDIT_checkOutPoint.au3' ; checks to see if the OUT is earlier than the IN
 #include 'includes\EDIT_setOutPoint.au3' ; sets the out point to the current playback position
 
 #include 'includes\EDIT_clearInPoint.au3' ; clears the in point
@@ -540,9 +555,13 @@ WEnd
 #include 'includes\EVENT_initializeEventChange.au3' ; change specific GUI items if you're in the middle of adding or modifying an event
 
 #include 'includes\EVENT_addEvent.au3' ; add an event to the event list
-#include 'includes\EVENT_modifyEventPrompt.au3' ; prompt to modify an event from the event list
 #include 'includes\EVENT_modifyEvent.au3' ; modify an event (and delete event(s) if necessary) from the event list
+#include 'includes\EVENT_modifyEventPrompt.au3' ; prompt to modify an event from the event list
+#include 'includes\EVENT_stripInfoFromName.au3' ; strip the <S: and F: from the event name and give just the name itself
+
 #include 'includes\EVENT_deleteEvent.au3' ; deleting an event (or multiple events) from the event list
+#include 'includes\EVENT_reorderArray.au3' ; re-order the # array after deleting an event
+#include 'includes\EVENT_reloadList.au3' ; reload a new list (search, deleted, reordered, randomized, etc.) into the events list
 #include 'includes\EVENT_clearEvents.au3' ; delete ALL events from the event list
 
 #include 'includes\EVENT_loadPrevNextEvent.au3' ; what happens when you click on the previous or next event buttons

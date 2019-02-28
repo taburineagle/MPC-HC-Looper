@@ -7,12 +7,3 @@ Func setInPoint() ; set the IN point
 	Sleep(50)
 	GUICtrlSetBkColor($inButton, 0xFF000000)
 EndFunc
-
-Func checkOutPoint()
-	$currentInPoint = TimeStringToNumber(GUICtrlRead($inTF))
-	$currentOutPoint = TimeStringToNumber(GUICtrlRead($outTF))
-
-	If $currentOutPoint < $currentInPoint Then
-		clearOutPoint()
-	EndIf
-EndFunc

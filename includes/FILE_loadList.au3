@@ -1,3 +1,7 @@
+Func loadListButtonClicked()
+	loadList()
+EndFunc
+
 Func loadList($fileToOpen = "") ; load a .looper file into the program
 	searchEventListRestore()
 
