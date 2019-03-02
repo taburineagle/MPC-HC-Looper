@@ -90,6 +90,8 @@ Global $currentEventCounter = "0 events in playlist (0:00 in entire playlist)" ;
 Global $OSDWindow, $OSDWindowX = 22, $OSDWindowY = 22
 Global $OSDeventNameTF, $OSDmodeTF, $OSDeventCounterTF, $OSDcurrentPositionTF, $OSDinPositionTF, $OSDoutPositionTF, $OSDCurrentRemainTF
 
+Global $minWidth = (418 + 30), $minHeight = 266, $maxHeight = (@DesktopHeight - 50)
+
 Global $randomPlayOrder[0]
 
 Global $eventListIndex, $completeEventList
