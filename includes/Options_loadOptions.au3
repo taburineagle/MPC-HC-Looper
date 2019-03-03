@@ -349,7 +349,7 @@ Func loadOptions() ; load or hide the options pane
 	WEnd
 
 	If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "autoPlayDialogs", "") <> 1 Then
-		__MPC_send_message($ghnd_MPC_handle, $CMD_PLAY, "") ; forces MPC to pause
+		__MPC_send_message($ghnd_MPC_handle, $CMD_PLAY, "") ; forces MPC to play
 	EndIf
 
 	loadHotKeys(1) ; re-enable hotkeys
