@@ -5,6 +5,10 @@ Func switchToShuffle()
 			GUICtrlSetBkColor($loopButton, 0x85e7f0)
 			switchEditingControls($GUI_DISABLE)
 			createRandomList()
+
+			If GUICtrlRead($listModifyButton) = "Merge Events" Then
+				GUICtrlSetData($listModifyButton, "Modify Event")
+			EndIf
 		Else
 			switchToLoop() ; if the button already says "Shuffle Mode", then just switch to Loop mode on the current loop item
 		EndIf

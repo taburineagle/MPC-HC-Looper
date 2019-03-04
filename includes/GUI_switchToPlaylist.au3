@@ -4,6 +4,10 @@ Func switchToPlaylist()
 		GUICtrlSetBkColor($loopButton, 0xffa882)
 		switchEditingControls($GUI_DISABLE)
 		clearRandomization()
+
+		If GUICtrlRead($listModifyButton) = "Merge Events" Then
+			GUICtrlSetData($listModifyButton, "Modify Event")
+		EndIf
 	Else
 		displayError("Playlist Mode")
 		switchToLoop() ; if the event list is empty, just switch to OFF mode

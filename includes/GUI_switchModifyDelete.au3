@@ -7,7 +7,7 @@ Func switchModifyDelete()
 			GUICtrlSetState($listModifyButton, $GUI_ENABLE)
 
 			If $iCount > 1 And $currentlySearching = 0 Then ; If we're in search mode, don't allow combining
-				If GUICtrlRead($listModifyButton) = "Modify Event" Then
+				If getMode() And GUICtrlRead($listModifyButton) = "Modify Event" Then
 					GUICtrlSetData($listModifyButton, "Merge Events")
 				EndIf
 			Else
