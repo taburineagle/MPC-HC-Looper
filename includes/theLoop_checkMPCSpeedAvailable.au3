@@ -19,5 +19,9 @@ Func checkMPCSpeedAvailable() ; checks to see if MPC-HC has a file loaded, if it
 		If GUICtrlGetState($__SPD_15X) = 144 Then GUICtrlSetState($__SPD_15X, $GUI_ENABLE)
 		If GUICtrlGetState($__SPD_175X) = 144 Then GUICtrlSetState($__SPD_175X, $GUI_ENABLE)
 		If GUICtrlGetState($__SPD_2X) = 144 Then GUICtrlSetState($__SPD_2X, $GUI_ENABLE)
+
+		If GUICtrlRead($speedSlider) <> $currentSpeed Then
+			GUICtrlSetData($speedSlider, $currentSpeed)
+		EndIf
 	EndIf
 EndFunc

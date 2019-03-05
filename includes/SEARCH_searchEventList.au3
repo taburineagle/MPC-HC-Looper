@@ -1,4 +1,5 @@
 Func searchEventList()
+	ControlFocus($mainWindow, "", $eventList)
 	$currentSearch = GUICtrlRead($searchEventTF)
 
 	If $currentlySearching = 0 Then

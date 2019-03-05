@@ -31,8 +31,7 @@ Func setSpeed2()
 EndFunc
 
 Func setSpeed($theSpeed)
-		displayStatusMsg("Setting speed to " & $theSpeed & " percent")
-		__MPC_send_message($ghnd_MPC_handle, $CMD_SETSPEED, Number($theSpeed) / 100)
-		GUICtrlSetData($speedSlider, $theSpeed)
-		$currentSpeed = $theSpeed
+	displayStatusMsg("Setting speed to " & $theSpeed & " percent")
+	__MPC_send_message($ghnd_MPC_handle, $CMD_SETSPEED, Number($theSpeed) / 100)
+	$currentSpeed = $theSpeed
 EndFunc
