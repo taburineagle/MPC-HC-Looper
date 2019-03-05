@@ -6,7 +6,7 @@ Func eventNamePrompt($textToInsert = "")
 
 	$eventNameTF = GUICtrlCreateEdit("", 8, 26, 297, 22, $ES_AUTOVSCROLL)
 
-	$speedLabel = GUICtrlCreateLabel("What Speed?", 8, 52, 81, 21, $SS_CENTER)
+	$speedLabel = GUICtrlCreateLabel("What Speed?", 8, 52, 81, 21, $SS_LEFT)
 	$speedTF = GUICtrlCreateEdit("", 8, 74, 81, 22, $ES_AUTOVSCROLL)
 
 	$repeatLabel = GUICtrlCreateLabel("How many repeats? (0 = Normal)", 104, 52, 205, 21, $SS_LEFT)
