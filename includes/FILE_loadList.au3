@@ -70,17 +70,18 @@ Func loadList($fileToOpen = "") ; load a .looper file into the program
 		If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "autoplayFirstEvent", "") <> 1 Then
 			If $specialConsideration = 0 Then ; if we're not doing anything special for Shuffle mode
 				$isClicked = 1
+				makeMPCActive()
 				loadEvent(0) ; if you're supposed to autoplay, then load that event, otherwise do nothing...
 			EndIf
 		Else
 			$currentPlayingEvent = -1 ; if we load the list, but don't autoplay the first event, set the current event to -1
 		EndIf
+	Else ; if we cancelled file opening, and we are set to auto-play, then start playback again
+		If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "autoPlayDialogs", "") <> 1 Then
+			__MPC_send_message($ghnd_MPC_handle, $CMD_PLAY, "") ; forces MPC to pause
+			makeMPCActive()
+		EndIf
 	EndIf
 
 	loadHotKeys(1) ; re-enable hotkeys
-
-	If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "autoPlayDialogs", "") <> 1 Then
-		__MPC_send_message($ghnd_MPC_handle, $CMD_PLAY, "") ; forces MPC to pause
-		makeMPCActive()
-	EndIf
 EndFunc
