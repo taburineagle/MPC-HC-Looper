@@ -1,6 +1,4 @@
 Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the event list
-
-
 	If _GUICtrlListView_GetItemText($eventList, $currentPlayingEvent, 0) = "▶" Then
 		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, $currentPlayingEventPos, 0) ; switch the current playing event # back to it's original state
 	EndIf
@@ -84,8 +82,10 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 					askForSave("Do you want to save a .looper file with the new file path you've just relinked?")
 				EndIf
 			Else
-				; You cancelled the file-finding process, so we'll just jump back to the events list now.
+				$currentPlayingEvent = $selectedItem ; if you didn't select a file, set $currentPlayingEvent to that item to skip it for the next pass
 			EndIf
+		Else
+			$currentPlayingEvent = $selectedItem ; if you decided -=not to find the file=-, see the above comment...
 		EndIf
 	EndIf
 EndFunc
