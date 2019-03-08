@@ -1754,51 +1754,20 @@ Func _GUIListViewEx_WM_LBUTTONUP_Handler($hWnd, $iMsg, $wParam, $lParam)
 			_GUIListViewEx_Highlight($hGLVEx_SrcHandle, $cGLVEx_SrcID, $iGLVEx_InsertIndex + $i)
 		Next
 
-		; ======================================================================
-		; == START DODGY SELECTED EVENT DETECTION                             ==
-		; ======================================================================
-		; == ZAG 1-30-18 Looper-specific addition to the UDF                  ==
-		; == ZAG 2-17-19 Changed display system to the new arrow display      ==
-		; == ZAG 3-7-19  Added a method to move the arrow pointer to the      ==
-		; ==             right place after a move if it's not dragged         ==
-		; ======================================================================
-		; == Checks to see if the current playing loop is among the items     ==
-		; == moved in the items to drag and drop - if it is, it changes       ==
-		; == $currentPlayingEvent to the new position, and re-highlights the  ==
-		; == new position in the list.                                        ==
-		; ======================================================================
-
-		Local $itemsIndex[$iMultipleItems + 1][3]
-
-		For $i = 0 to $iMultipleItems
-			$itemsIndex[$i][0] = $iGLVEx_DraggedIndex + $i ; the first, 2nd, etc., index of the items being moved
-			$itemsIndex[$i][1] = $iGLVEx_InsertIndex + $i ; the first, 2nd, etc., index of the new locations
-			If $currentPlayingEvent = $iGLVEx_DraggedIndex + $i Then $itemsIndex[$i][2] = "*" ; if the current playing event is in the source items, it puts a * in that row
-		Next
-
-		$currentLoopMoved = _ArraySearch($itemsIndex, "*", Default, Default, Default, Default, Default, 2) ; searches for the * in the array above
-
-		If $currentLoopMoved <> -1 Then ; if the currently playing event is in part of the selection that was moved
-			$currentPlayingEvent = $itemsIndex[$currentLoopMoved][1] ; change the $currentPlayingEvent to the new location in the events list
-		Else ; if the current playing event is NOT in the selection that was moved
-			If $currentPlayingEvent < $iGLVEx_InsertIndex Then ; if the current playing event is above the drop line
-				; Don't do anything, we're already above the line
-			Else ; if the current playing event is BELOW the drop line
-				$currentPlayingEvent = $currentPlayingEvent + $iMultipleItems + 1 ; add the # of items dragged from above to the $currentPlayingEvent counter
-			EndIf
-		EndIf
-
-		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0) ; tell the event list that the event is now playing in its new place
-
-		; ======================================================================
-		; == END DODGY SELECTED EVENT DETECTION                               ==
-		; ======================================================================
-
 		; Store amended array
 		$aGLVEx_Data[$aGLVEx_Data[0][1]][2] = $aGLVEx_SrcArray
+
+		; Find the new currently playing event and put the arrow next to it
+		$currentPlayingEvent = _ArraySearch($aGLVEx_SrcArray, $currentPlayingEventPos, Default, Default, Default, Default, Default, 0) - 1
+		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0) ; tell the event list that the event is now playing in its new place
+
 		; Delete copied arrays
 		$aGLVEx_SrcArray = 0
 		$aGLVEx_TgtArray = 0
+
+		; ======================================================
+		; = NEW LOCATION FUNCTION                              =
+		; ======================================================
 
 	Else ; Dropping in another ListView
 
