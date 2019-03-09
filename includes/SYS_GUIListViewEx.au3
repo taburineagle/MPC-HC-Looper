@@ -1405,6 +1405,11 @@ Func _GUIListViewEx_WM_NOTIFY_Handler($hWnd, $iMsg, $wParam, $lParam)
 						Next
 						; Store amended array
 						$aGLVEx_Data[$iLV_Index][2] = $aGLVEx_SrcArray
+
+						; Find the new currently playing event and put the arrow next to it
+						$currentPlayingEvent = _ArraySearch($aGLVEx_SrcArray, $currentPlayingEventPos, 1, Default, Default, 1, Default, 0) - 1
+						_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0) ; tell the event list that the event is now playing in its new place
+
 						; Delete array
 						$aGLVEx_SrcArray = 0
 					EndIf
@@ -1758,7 +1763,7 @@ Func _GUIListViewEx_WM_LBUTTONUP_Handler($hWnd, $iMsg, $wParam, $lParam)
 		$aGLVEx_Data[$aGLVEx_Data[0][1]][2] = $aGLVEx_SrcArray
 
 		; Find the new currently playing event and put the arrow next to it
-		$currentPlayingEvent = _ArraySearch($aGLVEx_SrcArray, $currentPlayingEventPos, Default, Default, Default, Default, Default, 0) - 1
+		$currentPlayingEvent = _ArraySearch($aGLVEx_SrcArray, $currentPlayingEventPos, 1, Default, Default, 1, Default, 0) - 1
 		_GUICtrlListView_SetItemText($eventList, $currentPlayingEvent, "▶", 0) ; tell the event list that the event is now playing in its new place
 
 		; Delete copied arrays

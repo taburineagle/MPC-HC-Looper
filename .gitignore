@@ -1,6 +1,8 @@
 # MPC-Looper Compilation Extras
 Media Player Classic Looper_stripped.au3
 Media Player Classic Looper.exe
+MPCLooper.ini
+bin/MPCLooper.ini
 
 # Windows image file caches
 Thumbs.db
