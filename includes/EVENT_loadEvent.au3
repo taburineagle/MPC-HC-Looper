@@ -21,10 +21,10 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 				; wait until the file loads
 			WEnd
 
+			Sleep(150)
+
 			$currentSpeed = 100 ; reset the current speed to 100, that way if the speed of the new event is slower, it forces it to re-slow...
 			$currentLoadedFile = $fileToLoad
-
-			__MPC_send_message($ghnd_MPC_handle, $CMD_STOP, "") ; forces MPC to stop (helps speed setting)
 		EndIf
 
 		$currentPlayingEvent = $selectedItem
