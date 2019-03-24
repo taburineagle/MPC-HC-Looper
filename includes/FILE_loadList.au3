@@ -65,6 +65,8 @@ Func loadList($fileToOpen = "") ; load a .looper file into the program
 					displayError("Shuffle Mode")
 				EndIf
 			EndIf
+		Else
+			switchToLoop()
 		EndIf
 
 		If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "autoplayFirstEvent", "") <> 1 Then

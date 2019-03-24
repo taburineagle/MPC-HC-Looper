@@ -2,7 +2,7 @@
 #AutoIt3Wrapper_Icon=MPC Icons.ico
 #AutoIt3Wrapper_Res_Comment=MPC-HC/MPC-BE Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=MPC-HC/MPC-BE Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2019.3.13.2
+#AutoIt3Wrapper_Res_Fileversion=2019.3.24.2
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=© 2014-2019 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
@@ -37,7 +37,6 @@
 #include <Misc.au3> ; To use the Singleton function and launch only one instance of the program
 #include 'includes\SYS_MPC-HC-API.au3' ; All of the API ties to Media Player Classic (modularized because I shouldn't have to change it)
 #include 'includes\SYS_ShellFile.au3' ; Associating the filetype with MPC-HC Looper
-#include 'includes\SYS_GUIListViewEx.au3' ; The new listview control (that lets you drag, drop, etc.)
 
 ; **************************************************************************
 ; ******* GLOBAL DECLARATIONS **********************************************
@@ -97,8 +96,6 @@ Global $randomPlayOrder[0]
 Global $eventListIndex, $completeEventList
 Global $currentlySearching = 0
 Global $searchResultsList[0]
-
-#include 'includes\TRAY_createTray.au3' ; create "Headless mode" menu in Systray
 
 ; **************************************************************************
 ; ****** HOLDING SHIFT DOWN IN THE BEGINNING TO TRIGGER DEFAULTS ***********
@@ -245,7 +242,7 @@ $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Ele
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
 
 ; The name of the program - auto-generated for beta releases, uncomment to release a specific version!
-$progTitle = GUICtrlCreateLabel("MPC-HC/MPC-BE Looper [3-13-19]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progTitle = GUICtrlCreateLabel("MPC-HC/MPC-BE Looper [3-24-19]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
 $progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-19 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
@@ -328,8 +325,10 @@ For $i = 36 to 49 ; set resizing of every element below the event list to don't 
 	GUICtrlSetResizing($i, $GUI_DOCKLEFT + $GUI_DOCKBOTTOM + $GUI_DOCKWIDTH + $GUI_DOCKHEIGHT)
 Next
 
+#include 'includes\SYS_GUIListViewEx.au3' ; The new listview control (that lets you drag, drop, etc.)
 _GUIListViewEx_MsgRegister() ; for Dragging and Dropping items
 
+#include 'includes\TRAY_createTray.au3' ; create "Headless mode" menu in Systray
 #include 'includes\SYS_WM_GETMINMAXINFO.au3' ; forces the window to stay the same width
 
 #include 'includes\DEFAULTS_loadWindowSizeDefaults.au3' ; procedure for setting opening window size dimensions when launching
