@@ -48,7 +48,11 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 			setSpeed(100)
 		EndIf
 
-		__MPC_send_message($ghnd_MPC_handle, $CMD_PLAY, "") ; tells MPC-HC to play
+		If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "pausePlaybackOnLoadEvent", "0") = "1" Then
+			__MPC_send_message($ghnd_MPC_handle, $CMD_PAUSE, "") ; forces MPC-HC to pause after loading and cueing the event
+		Else
+			__MPC_send_message($ghnd_MPC_handle, $CMD_PLAY, "") ; tells MPC-HC to play after loading and cueing the event
+		EndIf
 	Else ; the event is looking for a file that it can't find...
 		__MPC_send_message($ghnd_MPC_handle, $CMD_PAUSE, "") ; forces MPC to pause
 		$findFile = MsgBox(4 + 48, "Can't find media file for the event you loaded", "The media file for this event can not be found:" & @CRLF & @CRLF & $currentFile & @CRLF & @CRLF & "Would you like to try and locate it elsewhere?")

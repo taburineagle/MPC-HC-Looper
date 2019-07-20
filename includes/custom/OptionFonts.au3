@@ -25,6 +25,7 @@ GUICtrlSetFont($autoPlayCheck, 10, 400, 0, "Segoe UI")
 GUICtrlSetFont($allowMICheck, 10, 400, 0, "Segoe UI")
 GUICtrlSetFont($MI_desc_2, 10, 400, 0, "Segoe UI")
 GUICtrlSetFont($autoPlayDialogsCheck, 10, 400, 0, "Segoe UI")
+GUICtrlSetFont($pauseOnEventCheck, 10, 400, 0, "Segoe UI")
 GUICtrlSetFont($askConfCheck, 10, 400, 0, "Segoe UI")
 
 GUICtrlSetFont($looperAssociateButton, 10, 400, 0, "Segoe UI")
