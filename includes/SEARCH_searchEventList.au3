@@ -1,4 +1,7 @@
 Func searchEventList()
+	HotKeySet("{Enter}") ; clear the ENTER hotkey if we're not looking at the search bar
+	$inSearchMode = 0 ; turn search mode off
+
 	ControlFocus($mainWindow, "", $eventList)
 	$currentSearch = GUICtrlRead($searchEventTF)
 

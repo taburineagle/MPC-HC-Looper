@@ -1,8 +1,11 @@
 Func doTheLoop()
-	$currentFocus = ControlGetFocus($mainWindow, "")
-
-	If $currentFocus = "Edit3" Then
+	If _WinAPI_GetFocus() = GUICtrlGetHandle($searchEventTF) Then
 		loadHotKeys(0) ; if we have the search text field enabled, then disable the hotkeys
+	Else
+		If $inSearchMode = 1 Then
+			HotKeySet("{Enter}") ; clear the ENTER hotkey if we're not looking at the search bar
+			$inSearchMode = 0 ; turn search mode off
+		EndIf
 	EndIf
 
 	If $isClicked = 1 Then

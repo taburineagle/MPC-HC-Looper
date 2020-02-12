@@ -2,9 +2,9 @@
 #AutoIt3Wrapper_Icon=MPC Icons.ico
 #AutoIt3Wrapper_Res_Comment=MPC-HC/MPC-BE Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=MPC-HC/MPC-BE Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2019.7.20.2
+#AutoIt3Wrapper_Res_Fileversion=2020.2.12.6
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
-#AutoIt3Wrapper_Res_LegalCopyright=© 2014-2019 Zach Glenwright
+#AutoIt3Wrapper_Res_LegalCopyright=© 2014-2020 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
 #AutoIt3Wrapper_Res_Icon_Add=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\MPCD.ico
 #AutoIt3Wrapper_Run_Au3Stripper=y
@@ -57,7 +57,7 @@ Global $currentPlayingEvent = -1 ; The event that's currently playing
 Global $currentPlayingEventPos = 0 ; The current playing event's position in the events list
 
 Global $isLoaded = 0 ; whether the file is open in MPC or not yet
-Global $currentLoadedFile = ""; Which file is currently open in MPC
+Global $currentLoadedFile = "" ; Which file is currently open in MPC
 Global $nowPlayingInfo ; current info retrieved from MPC with a lot of info
 
 Global $currentOrRemaining = 0 ; are we looking at current time, or remaining time in the loop?
@@ -71,7 +71,7 @@ Global $hotKeysActive = False ; boolean to tell whether or not hotkeys are activ
 
 Global $isClicked = 0 ; Whether an item has been double-clicked or not
 
-Global $HotkeyList[34] = ["i", "o", "^i", "^o", "^x", "+l", "^t", "+o", "[", "]", ";", "'", "+[", "+]", "+;", "+'","^q", "^,", "^n", "^l", "^s", _
+Global $HotkeyList[34] = ["i", "o", "^i", "^o", "^x", "+l", "^t", "+o", "[", "]", ";", "'", "+[", "+]", "+;", "+'", "^q", "^,", "^n", "^l", "^s", _
 "{DEL}", "!^{BS}", "{SPACE}", "!{ENTER}", "^{PGUP}", "^{PGDN}", "^{UP}", "^{DOWN}", "^r", "^1", "^2", "^3", "^4"]
 
 Global $tryingToQuit = 0 ; Triggers if the Quit command has been called, to prevent it from being called more than once
@@ -80,6 +80,8 @@ Global $MPCInitialized = 0 ; Whether or not MPC-HC is tied to this program
 
 Global $displayTimer = 0 ; The second the timer started, defaults to not on at all
 Global $displayMessage = 0 ; Whether we're looking at the current time or not
+
+Global $inSearchMode = 0 ; Whether or not we've clicked on the search bar
 
 Global $currentSpeed = 100 ; the current playback speed
 
@@ -109,7 +111,7 @@ Else
 	$loadDefaults = False
 EndIf
 
-DLLClose($hDLL)
+DllClose($hDLL)
 
 ; **************************************************************************
 ; ******* RUNNING MULTIPLE COPIES (OR NOT)**********************************
@@ -152,7 +154,7 @@ Func launchFromExplorer()
 		FileWrite($writingFile, $cmdline[1])
 		FileClose($writingFile)
 	EndIf
-EndFunc
+EndFunc   ;==>launchFromExplorer
 
 Func checkWhichLooperToLoad()
 	If $cmdline[0] <> 0 Then
@@ -161,7 +163,7 @@ Func checkWhichLooperToLoad()
 	Else
 		$lastPlayedLooper = IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "autoloadLastLooper", "")
 
-		If $lastPlayedLooper <> ""  Then ; if we're not loading factory defaults, and the value isn't clear
+		If $lastPlayedLooper <> "" Then ; if we're not loading factory defaults, and the value isn't clear
 			If $lastPlayedLooper <> 1 Then ; if there actually is a value for the last played .looper file
 				$lastPlayedLooper = StringSplit($lastPlayedLooper, "|", 2)
 
@@ -172,7 +174,7 @@ Func checkWhichLooperToLoad()
 			EndIf
 		EndIf
 	EndIf
-EndFunc
+EndFunc   ;==>checkWhichLooperToLoad
 
 $mainWindow = GUICreate("MPC-HC Looper!", (404 + 30), 538, (@DesktopWidth - (429 + 30)), 11, BitOR($WS_MAXIMIZEBOX, $WS_SIZEBOX, $WS_MINIMIZEBOX))
 
@@ -211,11 +213,11 @@ $OSDButton = GUICtrlCreateButton("OSD Off", 215, 6, 82, 25) ; GUI Element 19
 $onTopButton = GUICtrlCreateButton("Always on Top", 300, 6, 124, 25) ; GUI Element 20
 
 $previousEventButton = GUICtrlCreateButton("<<", 8, 92, 51, 28) ; GUI Element 21
-$speedSlider = GUICtrlCreateSlider(64, 92, 305, 17, BitOR($GUI_SS_DEFAULT_SLIDER,$TBS_NOTICKS)) ; GUI Element 22
+$speedSlider = GUICtrlCreateSlider(64, 92, 305, 17, BitOR($GUI_SS_DEFAULT_SLIDER, $TBS_NOTICKS)) ; GUI Element 22
 $__SPD_025X = GUICtrlCreateLabel("25%", 91, 110, 36, 17) ; GUI Element 23
 $__SPD_05X = GUICtrlCreateLabel("50%", 126, 110, 30, 17) ; GUI Element 24
 $__SPD_075X = GUICtrlCreateLabel("75%", 164, 110, 36, 17) ; GUI Element 25
-$__SPD_1X = GUICtrlCreateLabel("100%", 195, 110, 27, 17)  ; GUI Element 26
+$__SPD_1X = GUICtrlCreateLabel("100%", 195, 110, 27, 17) ; GUI Element 26
 $__SPD_125X = GUICtrlCreateLabel("125%", 237, 110, 36, 17) ; GUI Element 27
 $__SPD_15X = GUICtrlCreateLabel("150%", 274, 110, 30, 17) ; GUI Element 28
 $__SPD_175X = GUICtrlCreateLabel("175%", 312, 110, 36, 17) ; GUI Element 29
@@ -227,7 +229,7 @@ $searchEventButton = GUICtrlCreateButton("Go", 344, 129, 35, 24) ; GUI Element 3
 $searchClearButton = GUICtrlCreateButton("Clear", 382, 129, 43, 24) ; GUI Element 34
 
 ; bottom event list GUI controls
-$eventList = GUICtrlCreateListView("#|Event|In Point|Out Point|Duration|Filename", 0, 160, (403 + 30), 257, BitOR($LVS_REPORT, $LVS_SHOWSELALWAYS), BitOR($LVS_EX_GRIDLINES, $LVS_EX_FULLROWSELECT))  ; GUI Element 35
+$eventList = GUICtrlCreateListView("#|Event|In Point|Out Point|Duration|Filename", 0, 160, (403 + 30), 257, BitOR($LVS_REPORT, $LVS_SHOWSELALWAYS), BitOR($LVS_EX_GRIDLINES, $LVS_EX_FULLROWSELECT)) ; GUI Element 35
 $HotKeyStatusTF = GUICtrlCreateLabel("", 6, 421, 90, 19) ; GUI Element 36
 $currentEventStatusTF = GUICtrlCreateLabel("", 106, 421, 318, 19, $SS_RIGHT) ; GUI Element 37
 
@@ -242,8 +244,8 @@ $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Ele
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
 
 ; The name of the program - auto-generated for beta releases, uncomment to release a specific version!
-$progTitle = GUICtrlCreateLabel("MPC-HC/MPC-BE Looper [7-20-19]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
-$progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-19 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
+$progTitle = GUICtrlCreateLabel("MPC-HC/MPC-BE Looper [02-12-20 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-20 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
 GUICtrlSetImage(-1, "C:\Windows\System32\shell32.dll", -91)
@@ -321,7 +323,7 @@ Next
 
 GUICtrlSetResizing(35, $GUI_DOCKLEFT + $GUI_DOCKTOP + $GUI_DOCKBOTTOM + $GUI_DOCKWIDTH) ; resize the event list in a different way
 
-For $i = 36 to 49 ; set resizing of every element below the event list to don't move
+For $i = 36 To 49 ; set resizing of every element below the event list to don't move
 	GUICtrlSetResizing($i, $GUI_DOCKLEFT + $GUI_DOCKBOTTOM + $GUI_DOCKWIDTH + $GUI_DOCKHEIGHT)
 Next
 
@@ -400,9 +402,9 @@ While 1 ; MAIN PROGRAM LOOP
 		; ======================= DS11 - If you ask for confirmation before closing MPC-HC =======================
 		If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "MPCConfirm", "") <> 1 Then
 			If $currentLoadedFile <> "" Then ; if we have a .looper file open, ask if you want to resume playback
-				$reloadMPC= MsgBox(4 + 32 + 262144 + 256, "MPC-HC Closed", "MPC-HC just closed, either you quit out of it, or it closed on it's own - would you like to re-open it?" & @CRLF & @CRLF & "If you choose " & '"Yes"' & " below, a new MPC-HC window will open and start playing the loop you're currently playing, and if you choose " & '"No"' & " below, MPC-HC Looper will shut down.")
+				$reloadMPC = MsgBox(4 + 32 + 262144 + 256, "MPC-HC Closed", "MPC-HC just closed, either you quit out of it, or it closed on it's own - would you like to re-open it?" & @CRLF & @CRLF & "If you choose " & '"Yes"' & " below, a new MPC-HC window will open and start playing the loop you're currently playing, and if you choose " & '"No"' & " below, MPC-HC Looper will shut down.")
 			Else ; otherwise, just ask if you want to re-open MPC-HC
-				$reloadMPC= MsgBox(4 + 32 + 262144 + 256, "MPC-HC Closed", "MPC-HC just closed, either you quit out of it, or it closed on it's own - would you like to re-open it?" & @CRLF & @CRLF & "If you choose " & '"Yes"' & " below, a new MPC-HC window will open, and if you choose " & '"No"' & " below, MPC-HC Looper will shut down.")
+				$reloadMPC = MsgBox(4 + 32 + 262144 + 256, "MPC-HC Closed", "MPC-HC just closed, either you quit out of it, or it closed on it's own - would you like to re-open it?" & @CRLF & @CRLF & "If you choose " & '"Yes"' & " below, a new MPC-HC window will open, and if you choose " & '"No"' & " below, MPC-HC Looper will shut down.")
 			EndIf
 
 			If $reloadMPC = 6 Then

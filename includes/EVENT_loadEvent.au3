@@ -23,7 +23,6 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 
 			Sleep(150)
 
-			$currentSpeed = 100 ; reset the current speed to 100, that way if the speed of the new event is slower, it forces it to re-slow...
 			$currentLoadedFile = $fileToLoad
 		EndIf
 
@@ -40,13 +39,7 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 
 		__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, TimeStringToNumber(GUICtrlRead($inTF)) - 0.5) ; seeks to the current IN point
 
-		If $speedSetting <> 0 Then
-			If $currentSpeed <> $speedSetting Then
-				setSpeed($speedSetting)
-			EndIf
-		Else
-			setSpeed(100)
-		EndIf
+		setSpeed($speedSetting)
 
 		If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "pausePlaybackOnLoadEvent", "0") = "1" Then
 			__MPC_send_message($ghnd_MPC_handle, $CMD_PAUSE, "") ; forces MPC-HC to pause after loading and cueing the event
