@@ -1,5 +1,5 @@
 Func saveList() ; save the current events list to a .looper file
-	$numOfEvents = getItemCount() ; how many events are in the event list
+	$numOfEvents = getItemCount() ; how many events are in the event list, used to make sure there are some there (you can't save if there aren't any events)
 
 	If $numOfEvents > 0 Then
 		If $isModified = 1 Then
@@ -16,6 +16,7 @@ Func saveList() ; save the current events list to a .looper file
 					; don't do anything
 				Else
 					searchEventListRestore() ; restore the list and set $currentlySearching to 0, so it'll be seen in the next step
+					Sleep(1000)
 				EndIf
 			EndIf
 
@@ -53,6 +54,8 @@ Func saveList() ; save the current events list to a .looper file
 
 			If $currentSaveFile <> "" Then ; you didn't cancel the saving process
 				$writingFile = FileOpen($currentSaveFile, 34)
+
+				$numOfEvents = getItemCount() ; once again get the count of items in the list, this time for actual saving purposes
 
 				For $i = 0 To $numOfEvents - 1
 					$writingLine = _GUICtrlListView_GetItemText($eventList, $i, 1) & "|"
