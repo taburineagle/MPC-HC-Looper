@@ -32,7 +32,51 @@ Func saveList() ; save the current events list to a .looper file
 
 			If $currentSaveFile = "" Then
 				If $currentlySearching = 0 Then
-					$currentSaveFile = FileSaveDialog("Where do you want to save the loop events file?", @DesktopDir, "MPC-HC Looper Events File (*.looper)", 16, ".looper")
+					$numOfEvents = getItemCount() ; once again get the count of items in the list, this time to check to see if every event comes from the same file
+					$saveSideCar = 0
+
+					If $numOfEvents = 1 Then
+						$saveSideCar = 1 ; since there's only one, change the default save name to save with the current video
+					ElseIf $numOfEvents > 1 Then
+						$firstFile = _GUICtrlListView_GetItemText($eventList, 0, 5) ; get the first video file's path from the event list
+						$grandTotal = 1
+
+						For $i = 1 to $numOfEvents - 1
+							If _GUICtrlListView_GetItemText($eventList, $i, 5) = $firstFile Then
+								$grandTotal = $grandTotal + 1 ; if the file matches, then increment the $grandTotal counter
+							EndIf
+						Next
+
+						If $grandTotal = $numOfEvents Then
+							$saveSideCar = 1 ; if every single event uses the same file path, then change the default save name
+						EndIf
+					EndIf
+
+					#cs
+					=============================================================================================================
+					= Prompt whether or not to save a sidecar file in the same path as the media file - this section taken out  =
+					= because it's kind of overkill... or is it?  I don't want to complicate things *too* much                  =
+					=============================================================================================================
+					If $saveSideCar = 1 Then
+						$sidecarPrompt = MsgBox(262144 + 4, "Save file - Save sidecar file?", "Would you want to save the current .looper file as a sidecar file?  This will store the .looper file in the same path as your media file, and with the same filename (but with .looper added to the end of the filename).")
+
+						If $sidecarPrompt = 7 Then ; you clicked "No"
+							$saveSideCar = 0 ; so just go to the normal Save dialog
+						EndIf
+					EndIf
+					#ce
+
+					If $saveSideCar = 0 Then
+						$currentSaveFile = FileSaveDialog("Where do you want to save the loop events file?", @DesktopDir, "MPC-HC Looper Events File (*.looper)", 16, ".looper")
+					Else
+						$firstFile = _GUICtrlListView_GetItemText($eventList, 0, 5)
+						$fileDelim = StringInStr($firstFile, "\", Default, -1)
+
+						$fileName = StringTrimLeft($firstFile, $fileDelim)
+						$filePath = StringLeft($firstFile, $fileDelim)
+
+ 						$currentSaveFile = FileSaveDialog("Where do you want to save the loop events file?", $filePath, "MPC-HC Looper Events File (*.looper)", 16, $fileName & ".looper")
+					EndIf
 				Else
 					$currentSaveFile = FileSaveDialog("Where do you want to save the partial loop events file?", @DesktopDir, "MPC-HC Looper Events File (*.looper)", 16, ".looper")
 				EndIf

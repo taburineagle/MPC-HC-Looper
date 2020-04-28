@@ -1,8 +1,9 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=MPC Icons.ico
+#AutoIt3Wrapper_Outfile=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\Media Player Classic Looper.exe
 #AutoIt3Wrapper_Res_Comment=MPC-HC/MPC-BE Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=MPC-HC/MPC-BE Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2020.3.30.5
+#AutoIt3Wrapper_Res_Fileversion=2020.4.27.6
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=© 2014-2020 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
@@ -12,7 +13,7 @@
 
 ; **************************************************************************
 ; ******* Media Player Classic Looper! *************************************
-; ******* (C) 2014-19 Zach Glenwright **************************************
+; ******* (C) 2014-20 Zach Glenwright **************************************
 ; **************************************************************************
 ; ******* http://www.gullswingmedia.com ************************************
 ; **************************************************************************
@@ -186,9 +187,9 @@ $inButton = GUICtrlCreateLabel("IN", 38, 34, 34, 25, BitOR($SS_CENTER, $SS_CENTE
 ; you have to create a control of a specific type first (which is why this snippet is after the IN
 ; button is created) before changing the declaration
 ; ==================================================================
-#include <WinAPIEx.au3>
-#include 'includes\SYS_Remove_CS_DBLCLKS.au3'
-_Remove_CS_DBLCLKS(-1) ; remove double-click ability from static controls (but not from buttons or list views!)
+;~ #include <WinAPIEx.au3>
+;~ #include 'includes\SYS_Remove_CS_DBLCLKS.au3'
+;~ _Remove_CS_DBLCLKS(-1) ; remove double-click ability from static controls (but not from buttons or list views!)
 ; ==================================================================
 $inTF = GUICtrlCreateInput("", 8, 64, 124, 25, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER)) ; GUI Element 4
 $inDecButton = GUICtrlCreateLabel("-", 8, 34, 27, 25, BitOR($SS_CENTER, $SS_CENTERIMAGE), $WS_EX_CLIENTEDGE)
@@ -244,7 +245,7 @@ $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Ele
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
 
 ; The name of the program - auto-generated for beta releases, uncomment to release a specific version!
-$progTitle = GUICtrlCreateLabel("MPC-HC/MPC-BE Looper [03-30-20 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progTitle = GUICtrlCreateLabel("MPC-HC/MPC-BE Looper [04-27-20 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
 $progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-20 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
