@@ -3,7 +3,7 @@
 #AutoIt3Wrapper_Outfile=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\Media Player Classic Looper.exe
 #AutoIt3Wrapper_Res_Comment=MPC-HC/MPC-BE Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=MPC-HC/MPC-BE Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2020.4.27.6
+#AutoIt3Wrapper_Res_Fileversion=2020.4.27.7
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=© 2014-2020 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
@@ -187,9 +187,10 @@ $inButton = GUICtrlCreateLabel("IN", 38, 34, 34, 25, BitOR($SS_CENTER, $SS_CENTE
 ; you have to create a control of a specific type first (which is why this snippet is after the IN
 ; button is created) before changing the declaration
 ; ==================================================================
-;~ #include <WinAPIEx.au3>
-;~ #include 'includes\SYS_Remove_CS_DBLCLKS.au3'
-;~ _Remove_CS_DBLCLKS(-1) ; remove double-click ability from static controls (but not from buttons or list views!)
+#include <WinAPIEx.au3>
+#include 'includes\SYS_Remove_CS_DBLCLKS.au3'
+_Remove_CS_DBLCLKS(-1) ; remove double-click ability from static controls (but not from buttons or list views!)
+
 ; ==================================================================
 $inTF = GUICtrlCreateInput("", 8, 64, 124, 25, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER)) ; GUI Element 4
 $inDecButton = GUICtrlCreateLabel("-", 8, 34, 27, 25, BitOR($SS_CENTER, $SS_CENTERIMAGE), $WS_EX_CLIENTEDGE)
