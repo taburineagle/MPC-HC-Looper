@@ -1,9 +1,9 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=MPC Icons.ico
 #AutoIt3Wrapper_Outfile=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\Media Player Classic Looper.exe
-#AutoIt3Wrapper_Res_Comment=MPC-HC/MPC-BE Looper lets you create multiple sets of A/B points, giving MPC-HC the ability to A/B loop.
+#AutoIt3Wrapper_Res_Comment=MPC-HC/MPC-BE Looper lets you create multiple sets of A/B points, giving MPC-HC/BE the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=MPC-HC/MPC-BE Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2020.4.27.7
+#AutoIt3Wrapper_Res_Fileversion=2020.6.28.11
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=© 2014-2020 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
@@ -128,18 +128,33 @@ If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "allowMultipleInstances", 0) 
 		checkWhichLooperToLoad()
 	EndIf
 Else ; We are allowing multiple instances in Looper, let's check to see if MPC-HC is...
-	$PathtoMPC = IniRead(@ScriptDir & "\MPCLooper.ini", "System", "MPCEXE", "") ; the path to MPC-HC for this session
-	$PathtoMPC = StringLeft($PathtoMPC, StringInStr($PathtoMPC, "\", Default, -1)) ; MPC-HC's base program path
+	$PathtoMPC = IniRead(@ScriptDir & "\MPCLooper.ini", "System", "MPCEXE", "") ; the path to MPC-HC/BE for this session
+	$baseEXEPath = StringTrimLeft($PathtoMPC, StringInStr($PathtoMPC, "\", Default, -1)); the base name for the .EXE file (to see if we're running HC or BE)
+	$PathtoMPC = StringLeft($PathtoMPC, StringInStr($PathtoMPC, "\", Default, -1)) ; MPC-HC/BE's base program path
 
-	; if none of the below give a positive value, or the files don't exist, the result at the end will just be 0 (no file = 0, by default)
-	$MPCAllowCheck = IniRead($PathtoMPC & "mpc-hc.ini", "Settings", "AllowMultipleInstances", 0) ; check 32-bit INI file (if it exists)
-	$MPCAllowCheck = $MPCAllowCheck + IniRead($PathtoMPC & "mpc-hc64.ini", "Settings", "AllowMultipleInstances", 0) ; check 64-bit INI file (if it exists)
-	$MPCAllowCheck = $MPCAllowCheck + RegRead("HKCU\Software\MPC-HC\MPC-HC\Settings", "AllowMultipleInstances") ; check MPC-HC's registry setting
+	$MPCAllowCheck = 0 ; prime the variable
+
+	If StringLeft($baseEXEPath, 6) = "MPC-HC" Then
+		; check MPC-HC (if we're using MPC-HC) to see if it has Multiple Instances turned on
+		; if none of the below give a positive value, or the files don't exist, the result at the end will just be 0 (no file = 0, by default)
+		$MPCAllowCheck = IniRead($PathtoMPC & "mpc-hc.ini", "Settings", "AllowMultipleInstances", 0) ; check 32-bit INI file (if it exists)
+		$MPCAllowCheck = $MPCAllowCheck + IniRead($PathtoMPC & "mpc-hc64.ini", "Settings", "AllowMultipleInstances", 0) ; check 64-bit INI file (if it exists)
+		$MPCAllowCheck = $MPCAllowCheck + RegRead("HKCU\Software\MPC-HC\MPC-HC\Settings", "AllowMultipleInstances") ; check MPC-HC's registry setting
+	ElseIf StringLeft($baseEXEPath, 6) = "MPC-BE" Then
+		; check MPC-BE (if we're using MPC-BE) to see if it has Multiple Instances turned on
+		; check 64 bit version of MPC-BE INI file to see if the flag is set (need test .ini file)
+		; check 32 bit version of MPC-BE INI file to see if the flag is set (need test .ini file)
+		$MPCAllowCheck = $MPCAllowCheck + RegRead("HKCU\Software\MPC-BE\Settings", "MultipleInstances") ; check MPC-BE's registry setting
+
+		If $MPCAllowCheck = 1 Then
+			$MPCAllowCheck = 0 ; if we're set to 1 (which MPC-BE uses to determine "normal operation"), then we're not set to do multiple instances
+		EndIf
+	EndIf
 
 	If $MPCAllowCheck = 0 Then ; If we returned from all the checks above, and none had this flag set, then MPC-HC doesn't allow multiple instances...
 		If _Singleton("MPC Looper", 1) = 0 Then ; we are allowing multiple instances, but MPC-HC is NOT...
 			launchFromExplorer() ; copy the filename into the text file for later opening (for the main process to pick up)
-			MsgBox(48 + 262144, "Multiple Instance Warning!", "You have multiple instances turned on in Looper, and you just launched another instance, but MPC-HC isn't set to allow multiple instances.  In that case, Looper will act like normal and not open any other multiple instances of itself." & @CRLF & @CRLF & "To allow the multiple instance feature, go to the MPC-HC options pane (View menu > Options), then click on " & '"Player"' & " at the top left and choose " & '"Open a new player for each media file played"' & ", and then save your changes - turning this on will allow you to have multiple Looper sessions running at the same time.")
+			MsgBox(48 + 262144, "Multiple Instance Warning!", "You have multiple instances turned on in Looper, and you just launched another instance, but MPC-HC/BE isn't set to allow multiple instances.  In that case, Looper will act like normal and not open any other multiple instances of itself." & @CRLF & @CRLF & "To allow the multiple instance feature, go to the MPC-HC options pane (View menu > Options), then click on " & '"Player"' & " at the top left and choose " & '"Open a new player for each media file played"' & ", and then save your changes - turning this on will allow you to have multiple Looper sessions running at the same time.")
 			Exit ; quit the new instance
 		Else
 			checkWhichLooperToLoad() ; if we're allowing multiple instances, but MPC-HC is NOT, and this is the first, then check to see which .looper file to load
@@ -246,7 +261,7 @@ $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Ele
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
 
 ; The name of the program - auto-generated for beta releases, uncomment to release a specific version!
-$progTitle = GUICtrlCreateLabel("MPC-HC/MPC-BE Looper [04-27-20 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progTitle = GUICtrlCreateLabel("MPC-HC/BE Looper [06-28-20 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
 $progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-20 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
@@ -345,6 +360,7 @@ _GUIListViewEx_MsgRegister() ; for Dragging and Dropping items
 ; **************************************************************************
 #include 'includes\SYS_linkMPC.au3'
 linkMPC() ; link Looper to an MPC-HC instance
+Sleep(1000) ; sleep to let the media program initialize before proceeding (this plays more nicely with MPC-BE and opening .looper files from Explorer)
 
 GUISetState(@SW_SHOW) ; show the Looper window
 

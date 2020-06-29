@@ -48,7 +48,7 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 		EndIf
 	Else ; the event is looking for a file that it can't find...
 		__MPC_send_message($ghnd_MPC_handle, $CMD_PAUSE, "") ; forces MPC to pause
-		$findFile = MsgBox(4 + 48, "Can't find media file for the event you loaded", "The media file for this event can not be found:" & @CRLF & @CRLF & $currentFile & @CRLF & @CRLF & "Would you like to try and locate it elsewhere?")
+		$findFile = MsgBox(4 + 48 + 262144, "Can't find media file for the event you loaded", "The media file for this event can not be found:" & @CRLF & @CRLF & $currentFile & @CRLF & @CRLF & "Would you like to try and locate it elsewhere?")
 
 		If $findFile = 6 Then
 			$currentFilePath = StringTrimLeft($currentFile, StringInStr($currentFile, "\", Default, -1)) ; the base name for the file we're looking for
@@ -57,27 +57,27 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 			$filePath = FileOpenDialog("Find Missing Media File", @DesktopDir, "Matching (" & $currentFilePath & ")|" & $currentExtension & " files (*." & $currentExtension & ")", Default, $currentFilePath)
 
 			If $filePath <> "" Then
-				$completeEventList = _GUIListViewEx_ReturnArray($eventListIndex) ; get the entire events list as an array to check other positions for this event
-				$completeEventList[$selectedItem] = StringReplace($completeEventList[$selectedItem], $currentFile, $filePath) ; replace the old filename with the new one for current event
-
-				$findFileReplaceAll = MsgBox(4 + 32, "Replace All Missing Links?", "You've chosen to replace the file for this event:" & @CRLF & @CRLF & $currentFile & @CRLF & @CRLF & "With this new path:" & @CRLF & @CRLF & $filePath & @CRLF & @CRLF & "Do you want to replace all of the events that used the old path for this file with the file you just found?")
-
-				If $findFileReplaceAll = 6 Then ; if you want to replace all events that used the old path with the new path, then you clicked Yes
-					For $i = 0 to UBound($completeEventList) - 1
-						$completeEventList[$i] = StringReplace($completeEventList[$i], $currentFile, $filePath) ; replace the old filename with the new one for every one that matches
-					Next
+				If $currentlySearching = 0 Then ; if we're not in search mode, then we don't have this set yet, so set it
+					$completeEventList = _GUIListViewEx_ReturnArray($eventListIndex) ; get the entire events list as an array to check other positions for this event
 				EndIf
 
-				reloadList($completeEventList) ; reload the events list again, but with the new filenames in place of the old ones
+				For $i = 0 to UBound($completeEventList) - 1 ; replace all the master list's filepaths with the new file
+					$completeEventList[$i] = StringReplace($completeEventList[$i], $currentFile, $filePath) ; replace the old filename with the new one for every one that matches
+				Next
+
+				If $currentlySearching <> 0 Then ; if we're searching, then replace the current paths with the updated path
+					For $i = 0 to UBound($searchResultsList) - 1
+						$searchResultsList[$i] = StringReplace($searchResultsList[$i], $currentFile, $filePath) ; replace the old filename with the new one for every one that matches
+					Next
+
+					reloadList($searchResultsList) ; reload the events list again, with the search array (because we're in search mode)
+				Else
+					reloadList($completeEventList) ; reload the events list again, but with the master list (because we're NOT in search mode)
+				EndIf
+
 				loadEvent($selectedItem) ; load the event we originally asked for again...
 
-				$isModified = 1
-
-				If $findFileReplaceAll = 6 Then
-					askForSave("Do you want to save a .looper file with the new file paths you've just relinked?")
-				Else
-					askForSave("Do you want to save a .looper file with the new file path you've just relinked?")
-				EndIf
+				setModified()
 			Else
 				$currentPlayingEvent = $selectedItem ; if you didn't select a file, set $currentPlayingEvent to that item to skip it for the next pass
 			EndIf

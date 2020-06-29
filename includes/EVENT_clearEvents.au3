@@ -6,7 +6,7 @@ Func clearEvents() ; delete all of the events in the event list
 	GUICtrlSetState($listDeleteButton, $GUI_DISABLE)
 	GUICtrlSetState($listModifyButton, $GUI_DISABLE)
 
-	If $currentlySearching <> 1 Then
+	If $currentlySearching = 0 Then
 		If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "dontForceLooperModeonOpen", 0) = 0 Then
 			switchToLoop()
 		EndIf
