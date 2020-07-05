@@ -3,7 +3,7 @@
 #AutoIt3Wrapper_Outfile=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\Media Player Classic Looper.exe
 #AutoIt3Wrapper_Res_Comment=MPC-HC/MPC-BE Looper lets you create multiple sets of A/B points, giving MPC-HC/BE the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=MPC-HC/MPC-BE Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2020.6.28.11
+#AutoIt3Wrapper_Res_Fileversion=2020.7.5.17
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=© 2014-2020 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
@@ -135,15 +135,22 @@ Else ; We are allowing multiple instances in Looper, let's check to see if MPC-H
 	$MPCAllowCheck = 0 ; prime the variable
 
 	If StringLeft($baseEXEPath, 6) = "MPC-HC" Then
-		; check MPC-HC (if we're using MPC-HC) to see if it has Multiple Instances turned on
-		; if none of the below give a positive value, or the files don't exist, the result at the end will just be 0 (no file = 0, by default)
-		$MPCAllowCheck = IniRead($PathtoMPC & "mpc-hc.ini", "Settings", "AllowMultipleInstances", 0) ; check 32-bit INI file (if it exists)
-		$MPCAllowCheck = $MPCAllowCheck + IniRead($PathtoMPC & "mpc-hc64.ini", "Settings", "AllowMultipleInstances", 0) ; check 64-bit INI file (if it exists)
+		If $baseEXEPath <> "MPC-HCPortable.exe" Then ; you're most likely using the normal version, but have an .ini file inside the main folder
+			$MPCAllowCheck = IniRead($PathtoMPC & "mpc-hc.ini", "Settings", "AllowMultipleInstances", 0) ; check 32-bit INI file (if it exists)
+			$MPCAllowCheck = $MPCAllowCheck + IniRead($PathtoMPC & "mpc-hc64.ini", "Settings", "AllowMultipleInstances", 0) ; check 64-bit INI file (if it exists)
+		Else ; if you're using the PortableApps version, the ini file sits in a different directory altogther...
+			$MPCAllowCheck = $MPCAllowCheck + IniRead($PathtoMPC & "App\MPC-HC\mpc-hc.ini", "Settings", "AllowMultipleInstances", 0) ; check 64-bit INI file (if it exists)
+		EndIf
+
 		$MPCAllowCheck = $MPCAllowCheck + RegRead("HKCU\Software\MPC-HC\MPC-HC\Settings", "AllowMultipleInstances") ; check MPC-HC's registry setting
 	ElseIf StringLeft($baseEXEPath, 6) = "MPC-BE" Then
-		; check MPC-BE (if we're using MPC-BE) to see if it has Multiple Instances turned on
-		; check 64 bit version of MPC-BE INI file to see if the flag is set (need test .ini file)
-		; check 32 bit version of MPC-BE INI file to see if the flag is set (need test .ini file)
+		If $baseEXEPath <> "MPC-BEPortable.exe" Then ; you're most likely using the normal version, but have an .ini file inside the main folder
+			$MPCAllowCheck = IniRead($PathtoMPC & "mpc-be.ini", "Settings", "MultipleInstances", 0) ; check 32-bit INI file (if it exists)
+			$MPCAllowCheck = $MPCAllowCheck + IniRead($PathtoMPC & "mpc-be64.ini", "Settings", "MultipleInstances", 0) ; check 64-bit INI file (if it exists)
+		Else  ; if you're using the PortableApps version, the ini file sits in a different directory altogther...
+			$MPCAllowCheck = $MPCAllowCheck + IniRead($PathtoMPC & "App\MPC-BE\mpc-be.ini", "Settings", "MultipleInstances", 0) ; check 64-bit INI file (if it exists)
+		EndIf
+
 		$MPCAllowCheck = $MPCAllowCheck + RegRead("HKCU\Software\MPC-BE\Settings", "MultipleInstances") ; check MPC-BE's registry setting
 
 		If $MPCAllowCheck = 1 Then
@@ -151,10 +158,12 @@ Else ; We are allowing multiple instances in Looper, let's check to see if MPC-H
 		EndIf
 	EndIf
 
+;~ 	MsgBox(0, "Multiple-Instances Debug", "$PathtoMPC: " & $PathtoMPC & @CRLF & "$baseEXEPath: " & $baseEXEPath & @CRLF & "$MPCAllowCheck: " & $MPCAllowCheck & @CRLF & @CRLF & "Current Player: " & StringLeft($baseEXEPath, 6))
+
 	If $MPCAllowCheck = 0 Then ; If we returned from all the checks above, and none had this flag set, then MPC-HC doesn't allow multiple instances...
 		If _Singleton("MPC Looper", 1) = 0 Then ; we are allowing multiple instances, but MPC-HC is NOT...
 			launchFromExplorer() ; copy the filename into the text file for later opening (for the main process to pick up)
-			MsgBox(48 + 262144, "Multiple Instance Warning!", "You have multiple instances turned on in Looper, and you just launched another instance, but MPC-HC/BE isn't set to allow multiple instances.  In that case, Looper will act like normal and not open any other multiple instances of itself." & @CRLF & @CRLF & "To allow the multiple instance feature, go to the MPC-HC options pane (View menu > Options), then click on " & '"Player"' & " at the top left and choose " & '"Open a new player for each media file played"' & ", and then save your changes - turning this on will allow you to have multiple Looper sessions running at the same time.")
+			MsgBox(48 + 262144, "Multiple Instance Warning!", "You have multiple instances turned on in Looper, and you just launched another instance, but MPC-HC/BE isn't set to allow multiple instances.  In that case, Looper will act like normal and not open any other multiple instances of itself." & @CRLF & @CRLF & "To allow the multiple instance feature, go to the MPC-HC/BE options pane (View menu > Options), then click on " & '"Player"' & " at the top left and choose (MPC-HC): " & '"Open a new player for each media file played"' & " or (MPC-BE): " & '"New process for every file"' & ", and then save your changes - turning this on will allow you to have multiple Looper sessions running at the same time.")
 			Exit ; quit the new instance
 		Else
 			checkWhichLooperToLoad() ; if we're allowing multiple instances, but MPC-HC is NOT, and this is the first, then check to see which .looper file to load
@@ -261,7 +270,7 @@ $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Ele
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
 
 ; The name of the program - auto-generated for beta releases, uncomment to release a specific version!
-$progTitle = GUICtrlCreateLabel("MPC-HC/BE Looper [06-28-20 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progTitle = GUICtrlCreateLabel("MPC-HC/BE Looper [07-05-20 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
 $progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-20 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
@@ -360,7 +369,7 @@ _GUIListViewEx_MsgRegister() ; for Dragging and Dropping items
 ; **************************************************************************
 #include 'includes\SYS_linkMPC.au3'
 linkMPC() ; link Looper to an MPC-HC instance
-Sleep(1000) ; sleep to let the media program initialize before proceeding (this plays more nicely with MPC-BE and opening .looper files from Explorer)
+Sleep(800) ; sleep to let the media program initialize before proceeding (this plays more nicely with MPC-BE and opening .looper files from Explorer)
 
 GUISetState(@SW_SHOW) ; show the Looper window
 
@@ -415,6 +424,8 @@ EndIf
 ; *******                                 MAIN PROGRAM LOOP                                 *******
 ; *************************************************************************************************
 
+__MPC_send_message($ghnd_MPC_handle, $CMD_GETNOWPLAYING, "") ; force player refresh when program starts, to get current player duration, etc.
+
 While 1 ; MAIN PROGRAM LOOP
 	If $MPCInitialized = 2 Then ; if MPC-HC has given the signal that it's shut down
 		; ======================= DS11 - If you ask for confirmation before closing MPC-HC =======================
@@ -448,8 +459,6 @@ While 1 ; MAIN PROGRAM LOOP
 		EndIf
 	Else ; THE MAIN LOOP!
 		checkWinActiveHotkeys() ; checks to see if the Looper program of MPC-HC is active, if not, it turns off hotkeys, if so... whoo!
-
-		refreshMPCInfo() ; refreshes nowPlayingInfo
 		checkPlayingNewFile() ; checks to see if a new file has been opened in MPC-HC, and if so, it resets the in and out points and does other things...
 
 		checkDocking() ; checks to see if the window needs to be docked
@@ -532,7 +541,6 @@ WEnd
 ; **************************************************************************
 #include 'includes\MPC_makeMPCActive.au3' ; makes MPC Active
 #include 'includes\MPC_openPathToFile.au3' ; opens Windows Explorer to the specific spot that the current playing file is
-#include 'includes\MPC_refreshMPCInfo.au3' ; forces MPC-HC to refresh it's playback info
 
 ; **************************************************************************
 ; ******* HOTKEY HANDLING PROCEDURES ***************************************

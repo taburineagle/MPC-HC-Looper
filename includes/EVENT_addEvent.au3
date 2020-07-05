@@ -12,8 +12,6 @@ Func addEvent() ; add an event to the event list
 			HotKeySet("^x", hotKeyPressed) ; initializes only CTRL-X to clear the selection as the event is being added
 		EndIf
 
-		refreshMPCInfo() ; refreshes nowPlayingInfo
-
 		If IsArray($nowPlayingInfo) = 1 Then
 			$currentFile = $nowPlayingInfo[4]
 		Else

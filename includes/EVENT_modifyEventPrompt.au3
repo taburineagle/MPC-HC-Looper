@@ -16,7 +16,6 @@ Func modifyEventPrompt() ; modify an event in the event list
 			$inPoint = GUICtrlRead($inTF)
 			$outPoint = GUICtrlRead($outTF)
 
-			refreshMPCInfo()
 			$currentFile = $nowPlayingInfo[4]
 
 			modifyEvent($currentPlayingEvent, $currentEvent, $currentName, $inPoint, $outPoint, $currentFile, $currentPlayingEvent, $currentPlayingEvent)
