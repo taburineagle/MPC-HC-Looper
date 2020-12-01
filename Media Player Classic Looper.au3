@@ -3,11 +3,12 @@
 #AutoIt3Wrapper_Outfile=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\Media Player Classic Looper.exe
 #AutoIt3Wrapper_Res_Comment=MPC-HC/MPC-BE Looper lets you create multiple sets of A/B points, giving MPC-HC/BE the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=MPC-HC/MPC-BE Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2020.7.5.17
+#AutoIt3Wrapper_Res_Fileversion=2020.12.2.10
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=© 2014-2020 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
 #AutoIt3Wrapper_Res_Icon_Add=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\MPCD.ico
+#AutoIt3Wrapper_Run_Tidy=y
 #AutoIt3Wrapper_Run_Au3Stripper=y
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
@@ -73,7 +74,7 @@ Global $hotKeysActive = False ; boolean to tell whether or not hotkeys are activ
 Global $isClicked = 0 ; Whether an item has been double-clicked or not
 
 Global $HotkeyList[34] = ["i", "o", "^i", "^o", "^x", "+l", "^t", "+o", "[", "]", ";", "'", "+[", "+]", "+;", "+'", "^q", "^,", "^n", "^l", "^s", _
-"{DEL}", "!^{BS}", "{SPACE}", "!{ENTER}", "^{PGUP}", "^{PGDN}", "^{UP}", "^{DOWN}", "^r", "^1", "^2", "^3", "^4"]
+		"{DEL}", "!^{BS}", "{SPACE}", "!{ENTER}", "^{PGUP}", "^{PGDN}", "^{UP}", "^{DOWN}", "^r", "^1", "^2", "^3", "^4"]
 
 Global $tryingToQuit = 0 ; Triggers if the Quit command has been called, to prevent it from being called more than once
 
@@ -129,7 +130,7 @@ If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "allowMultipleInstances", 0) 
 	EndIf
 Else ; We are allowing multiple instances in Looper, let's check to see if MPC-HC is...
 	$PathtoMPC = IniRead(@ScriptDir & "\MPCLooper.ini", "System", "MPCEXE", "") ; the path to MPC-HC/BE for this session
-	$baseEXEPath = StringTrimLeft($PathtoMPC, StringInStr($PathtoMPC, "\", Default, -1)); the base name for the .EXE file (to see if we're running HC or BE)
+	$baseEXEPath = StringTrimLeft($PathtoMPC, StringInStr($PathtoMPC, "\", Default, -1)) ; the base name for the .EXE file (to see if we're running HC or BE)
 	$PathtoMPC = StringLeft($PathtoMPC, StringInStr($PathtoMPC, "\", Default, -1)) ; MPC-HC/BE's base program path
 
 	$MPCAllowCheck = 0 ; prime the variable
@@ -147,7 +148,7 @@ Else ; We are allowing multiple instances in Looper, let's check to see if MPC-H
 		If $baseEXEPath <> "MPC-BEPortable.exe" Then ; you're most likely using the normal version, but have an .ini file inside the main folder
 			$MPCAllowCheck = IniRead($PathtoMPC & "mpc-be.ini", "Settings", "MultipleInstances", 0) ; check 32-bit INI file (if it exists)
 			$MPCAllowCheck = $MPCAllowCheck + IniRead($PathtoMPC & "mpc-be64.ini", "Settings", "MultipleInstances", 0) ; check 64-bit INI file (if it exists)
-		Else  ; if you're using the PortableApps version, the ini file sits in a different directory altogther...
+		Else ; if you're using the PortableApps version, the ini file sits in a different directory altogther...
 			$MPCAllowCheck = $MPCAllowCheck + IniRead($PathtoMPC & "App\MPC-BE\mpc-be.ini", "Settings", "MultipleInstances", 0) ; check 64-bit INI file (if it exists)
 		EndIf
 
@@ -270,7 +271,7 @@ $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Ele
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
 
 ; The name of the program - auto-generated for beta releases, uncomment to release a specific version!
-$progTitle = GUICtrlCreateLabel("MPC-HC/BE Looper [07-05-20 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progTitle = GUICtrlCreateLabel("MPC-HC/BE Looper [12-02-20]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
 $progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-20 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
@@ -424,8 +425,6 @@ EndIf
 ; *******                                 MAIN PROGRAM LOOP                                 *******
 ; *************************************************************************************************
 
-__MPC_send_message($ghnd_MPC_handle, $CMD_GETNOWPLAYING, "") ; force player refresh when program starts, to get current player duration, etc.
-
 While 1 ; MAIN PROGRAM LOOP
 	If $MPCInitialized = 2 Then ; if MPC-HC has given the signal that it's shut down
 		; ======================= DS11 - If you ask for confirmation before closing MPC-HC =======================
@@ -458,6 +457,8 @@ While 1 ; MAIN PROGRAM LOOP
 			Uninitialize()
 		EndIf
 	Else ; THE MAIN LOOP!
+		__MPC_send_message($ghnd_MPC_handle, $CMD_GETNOWPLAYING, "") ; force player refresh to get current player duration, etc.
+
 		checkWinActiveHotkeys() ; checks to see if the Looper program of MPC-HC is active, if not, it turns off hotkeys, if so... whoo!
 		checkPlayingNewFile() ; checks to see if a new file has been opened in MPC-HC, and if so, it resets the in and out points and does other things...
 
