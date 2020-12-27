@@ -52,20 +52,6 @@ Func saveList() ; save the current events list to a .looper file
 						EndIf
 					EndIf
 
-					#cs
-					=============================================================================================================
-					= Prompt whether or not to save a sidecar file in the same path as the media file - this section taken out  =
-					= because it's kind of overkill... or is it?  I don't want to complicate things *too* much                  =
-					=============================================================================================================
-					If $saveSideCar = 1 Then
-						$sidecarPrompt = MsgBox(262144 + 4, "Save file - Save sidecar file?", "Would you want to save the current .looper file as a sidecar file?  This will store the .looper file in the same path as your media file, and with the same filename (but with .looper added to the end of the filename).")
-
-						If $sidecarPrompt = 7 Then ; you clicked "No"
-							$saveSideCar = 0 ; so just go to the normal Save dialog
-						EndIf
-					EndIf
-					#ce
-
 					If $saveSideCar = 0 Then
 						$currentSaveFile = FileSaveDialog("Where do you want to save the loop events file?", @DesktopDir, "MPC-HC Looper Events File (*.looper)", 16, ".looper")
 					Else
@@ -97,6 +83,20 @@ Func saveList() ; save the current events list to a .looper file
 			EndIf
 
 			If $currentSaveFile <> "" Then ; you didn't cancel the saving process
+				$currentlyHidden = 0
+
+				If FileExists($currentSaveFile) Then
+					$currentAttrib = FileGetAttrib($currentSaveFile) ; get file attributes of save file (if it exists)
+
+					If StringInStr($currentAttrib, "H") <> 0 Then
+						$currentlyHidden = 1
+					EndIf
+				EndIf
+
+				If $currentlyHidden = 1 Then
+						FileSetAttrib($currentSaveFile, "-H") ; if the file is hidden, temporarily unhide it to write to it
+				EndIf
+
 				$writingFile = FileOpen($currentSaveFile, 34)
 
 				$numOfEvents = getItemCount() ; once again get the count of items in the list, this time for actual saving purposes
@@ -111,6 +111,10 @@ Func saveList() ; save the current events list to a .looper file
 				Next
 
 				FileClose($writingFile)
+
+				If $currentlyHidden = 1 Then
+					FileSetAttrib($currentSaveFile, "+H") ; if the file is supposed to be hidden, re-hide it
+				EndIf
 
 				setModified(0)
 				$currentLooperFile = $currentSaveFile
