@@ -13,7 +13,7 @@ Func addEvent() ; add an event to the event list
 		EndIf
 
 		If IsArray($nowPlayingInfo) = 1 Then
-			$currentFile = $nowPlayingInfo[4]
+			$currentFile = $nowPlayingInfo[Ubound($nowPlayingInfo) - 2]
 		Else
 			$currentFile = ""
 		EndIf

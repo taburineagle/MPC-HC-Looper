@@ -16,7 +16,7 @@ Func modifyEventPrompt() ; modify an event in the event list
 			$inPoint = GUICtrlRead($inTF)
 			$outPoint = GUICtrlRead($outTF)
 
-			$currentFile = $nowPlayingInfo[4]
+			$currentFile = $nowPlayingInfo[Ubound($nowPlayingInfo) - 2]
 
 			modifyEvent($currentPlayingEvent, $currentEvent, $currentName, $inPoint, $outPoint, $currentFile, $currentPlayingEvent, $currentPlayingEvent)
 		EndIf

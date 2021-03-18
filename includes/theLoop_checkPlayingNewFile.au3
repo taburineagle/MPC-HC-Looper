@@ -1,6 +1,6 @@
 Func checkPlayingNewFile()
 	If IsArray($nowPlayingInfo) = 1 Then
-		If $currentLoadedFile = "" Or $currentLoadedFile <> $nowPlayingInfo[4] Then
+		If $currentLoadedFile = "" Or $currentLoadedFile <> $nowPlayingInfo[Ubound($nowPlayingInfo) - 2] Then
 			clearInOutPoint()
 
 			If GUICtrlRead($loopButton) = "Playlist Mode" Or GUICtrlRead($loopButton) = "Shuffle Mode" Then
@@ -8,7 +8,7 @@ Func checkPlayingNewFile()
 			EndIf
 
 			setSpeed(100)
-			$currentLoadedFile = $nowPlayingInfo[4]
+			$currentLoadedFile = $nowPlayingInfo[Ubound($nowPlayingInfo) - 2]
 		EndIf
 	EndIf
 EndFunc

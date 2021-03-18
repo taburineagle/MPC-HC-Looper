@@ -2,7 +2,7 @@ Func clearOutPoint() ; clear the OUT point
 	GUICtrlSetBkColor($clearOutButton, 0xb9b9b9)
 
 	If IsArray($nowPlayingInfo) Then
-		GUICtrlSetData($outTF, NumberToTimeString($nowPlayingInfo[5] + 0.5 - 0.057))
+		GUICtrlSetData($outTF, NumberToTimeString($nowPlayingInfo[Ubound($nowPlayingInfo) - 1] + 0.5 - 0.057))
 	EndIf
 
 	clearOSDInfo()
