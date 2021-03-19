@@ -3,9 +3,9 @@
 #AutoIt3Wrapper_Outfile=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\Media Player Classic Looper.exe
 #AutoIt3Wrapper_Res_Comment=MPC-HC/MPC-BE Looper lets you create multiple sets of A/B points, giving MPC-HC/BE the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=MPC-HC/MPC-BE Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2020.12.23.5
+#AutoIt3Wrapper_Res_Fileversion=2021.3.19.13
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
-#AutoIt3Wrapper_Res_LegalCopyright=© 2014-2020 Zach Glenwright
+#AutoIt3Wrapper_Res_LegalCopyright=© 2014-2021 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
 #AutoIt3Wrapper_Res_Icon_Add=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\MPCD.ico
 #AutoIt3Wrapper_Run_Au3Stripper=y
@@ -270,8 +270,8 @@ $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Ele
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
 
 ; The name of the program - auto-generated for beta releases, uncomment to release a specific version!
-$progTitle = GUICtrlCreateLabel("MPC-HC/BE Looper [12-23-20 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
-$progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-20 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
+$progTitle = GUICtrlCreateLabel("MPC-HC/BE Looper [03-19-21 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-21 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
 GUICtrlSetImage(-1, "C:\Windows\System32\shell32.dll", -91)
@@ -367,11 +367,10 @@ _GUIListViewEx_MsgRegister() ; for Dragging and Dropping items
 ; **************************************************************************
 ; ****** MEDIA PLAYER CLASSIC TIES TO THIS PROGRAM *************************
 ; **************************************************************************
+
 #include 'includes\SYS_linkMPC.au3'
 linkMPC() ; link Looper to an MPC-HC instance
 Sleep(800) ; sleep to let the media program initialize before proceeding (this plays more nicely with MPC-BE and opening .looper files from Explorer)
-
-GUISetState(@SW_SHOW) ; show the Looper window
 
 If $loadDefaults = True Then ; If you hold SHIFT down at startup, it loads the default values for sizing
 	$loopPreviewLength = 0.25 ; The length of the preview window for IN/OUT
@@ -379,10 +378,16 @@ If $loadDefaults = True Then ; If you hold SHIFT down at startup, it loads the d
 
 	switchToLoop() ; if we're in defaults, then switch to Loop mode
 Else ; You have preferences saved, and you didn't default to factory settings, so load the settings from the INI file
-	setDockingModeDefaults()
 	loadWindowSizeDefaults()
+
+	setDockingModeDefaults()
+	WinActivate($mainWindow) ; ensure the main Looper window is active to check docking
+	checkDocking() ; move the main window to the correct docking position (relative to taskbar location)
+
 	setAlwaysOnTopDefaults()
 EndIf
+
+GUISetState(@SW_SHOW) ; show the Looper window
 
 If $currentLooperFile <> "" Then ; if $currentLooperFile is defined, let's try opening that
 	loadList($currentLooperFile)
