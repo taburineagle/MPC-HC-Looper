@@ -1,9 +1,9 @@
 Func reloadList($listToLoad)
 	_GUIListViewEx_Close($eventListIndex)
 	$eventListIndex = 0
-	_GUICtrlListView_DeleteAllItems($eventList)
 
 	_GUICtrlListView_BeginUpdate($eventList)
+	_GUICtrlListView_DeleteAllItems($eventList)
 
 	For $i = 0 to UBound($listToLoad) - 1
 		GUICtrlCreateListViewItem($listToLoad[$i], $eventList)
