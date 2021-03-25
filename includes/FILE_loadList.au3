@@ -21,14 +21,22 @@ Func loadList($fileToOpen = "") ; load a .looper file into the program
 
 		Local $eventArray[$eventCount]
 
+		; To correct the time discrepancy between new MPC-HC versions that display the non-High precision time correctly (older versions were
+		; offset by 500ms for some reason), we have to offset the looper file timestamps (so they're backwards compatible with older versions of Looper)
+		If $timeAdjustment = 0 Then
+			$eventOffset = 0.5
+		Else
+			$eventOffset = 0
+		EndIf
+
 		For $i = 0 to ($eventCount - 1)
 			$currentItem = FileReadLine($readingFile, ($i + 1))
 			$currentItemArray = StringSplit($currentItem, "|", 2)
 
 			$newItem = ($i + 1) & "|"
 			$newItem = $newItem & $currentItemArray[0] & "|"
-			$newItem = $newItem & $currentItemArray[1] & "|"
-			$newItem = $newItem & $currentItemArray[2] & "|"
+			$newItem = $newItem & NumberToTimeString(TimeStringToNumber($currentItemArray[1]) - $eventOffset) & "|"
+			$newItem = $newItem & NumberToTimeString(TimeStringToNumber($currentItemArray[2]) - $eventOffset) & "|"
 			$newItem = $newItem & NumberToTimeString(getEventDur($currentItemArray[1], $currentItemArray[2])) & "|"
 			$newItem = $newItem & $currentItemArray[3]
 

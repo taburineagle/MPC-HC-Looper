@@ -19,7 +19,7 @@ Func trimOutPointInc($trimAmount = 0) ; trim the OUT point forward
 
 		$trimmingOut = 1
 		clearOSDInfo()
-		__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, (TimeStringToNumber(GUICtrlRead($outTF)) - 0.5 - ($loopPreviewLength / 2)))
+		__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, (TimeStringToNumber(GUICtrlRead($outTF)) - ($timeAdjustment * 0.5) - ($loopPreviewLength / 2)))
 
 		If $firstRun = True Then
 			Sleep(250) ; if this is the first time you clicked the button, give it some time to rest (to show it's waiting)

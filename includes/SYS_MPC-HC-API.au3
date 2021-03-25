@@ -9,6 +9,8 @@ Global Const $CMD_GETNOWPLAYING = 0xA0003002 ; get information about what's curr
 Global Const $CMD_NOWPLAYING = 0x50000003 ; the information returned from MPC
 
 Global Const $CMD_STATE = 0x50000001
+
+Global Const $CMD_GETVERSION = 0xA0003006 ; Ask MPC-HC/BE for its version info
 Global Const $CMD_GETCURRENTPOSITION = 0xA0003004 ; Ask for the current playback position
 Global Const $CMD_SETPOSITION = 0xA0002000 ; Cue current file to specific position
 Global Const $CMD_SETSPEED = 0xA0004008 ; Set the speed to a specific speed
@@ -74,7 +76,9 @@ Func __Msg_WM_COPYDATA($hWnd, $Msg, $wParam, $lParam)
 	$s_DataString = DllStructGetData($st_DataString, "DataString")
 
 	Switch $s_dwData
-		Case 1342177280
+		Case 1342177290 ; MPC-HC/BE is reporting its version (for time offsets)
+			$timeAdjustment = $s_DataString ; get the current version string from MPC-HC - this value will be overwritten in the linking step
+		Case 1342177280 ; MPC-HC/BE has connected to Looper
 			$ghnd_MPC_handle = $s_DataString ; Connect this script to MPC
 		Case 1342177283
 			$nowPlayingInfo = StringSplit($s_DataString, "|") ; gets the info for the currently loaded file (to figure out length of video)

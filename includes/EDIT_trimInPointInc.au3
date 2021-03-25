@@ -18,7 +18,7 @@ Func trimInPointInc($trimAmount = 0) ; trim the IN point forward
 		GUICtrlSetData($inTF, $newInPoint)
 
 		clearOSDInfo()
-		__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, TimeStringToNumber(GUICtrlRead($inTF)) - 0.5)
+		__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, TimeStringToNumber(GUICtrlRead($inTF)) - ($timeAdjustment * 0.5))
 
 		If $firstRun = True Then
 			Sleep(250) ; if this is the first time you clicked the button, give it some time to rest (to show it's waiting)

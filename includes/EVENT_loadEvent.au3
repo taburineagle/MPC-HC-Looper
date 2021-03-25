@@ -37,7 +37,7 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 		$loopRepeats[0] = checkNameRepeatSetting($currentName) ; the number of repeats for the current loop
 		$loopRepeats[1] = 1 ; always set this to 1 (this is the first loop)
 
-		__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, TimeStringToNumber(GUICtrlRead($inTF)) - 0.5) ; seeks to the current IN point
+		__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, TimeStringToNumber(GUICtrlRead($inTF)) - ($timeAdjustment * 0.5)) ; seeks to the current IN point
 
 		setSpeed($speedSetting)
 

@@ -36,8 +36,8 @@ Func doTheLoop()
 
 	If GUICtrlRead($loopButton) = "Loop Mode" Or GUICtrlRead($loopButton) = "Playlist Mode" Or _
 	GUICtrlRead($loopButton) = "Shuffle Mode" Then ; we have LOOP turned on
-		$currentInPoint = TimeStringToNumber(GUICtrlRead($inTF)) - 0.5
-		$currentOutPoint = TimeStringToNumber(GUICtrlRead($outTF)) - 0.5
+		$currentInPoint = TimeStringToNumber(GUICtrlRead($inTF)) - ($timeAdjustment * 0.5)
+		$currentOutPoint = TimeStringToNumber(GUICtrlRead($outTF)) - ($timeAdjustment * 0.5)
 
 		If $trimmingOut = 1 Then
 			$currentOutPoint = $currentOutPoint + ($loopPreviewLength / 4)

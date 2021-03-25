@@ -101,10 +101,18 @@ Func saveList() ; save the current events list to a .looper file
 
 				$numOfEvents = getItemCount() ; once again get the count of items in the list, this time for actual saving purposes
 
+				; To correct the time discrepancy between new MPC-HC versions that display the non-High precision time correctly (older versions were
+				; offset by 500ms for some reason), we have to offset the looper file timestamps (so they're backwards compatible with older versions of Looper)
+				If $timeAdjustment = 0 Then
+					$eventOffset = 0.5
+				Else
+					$eventOffset = 0
+				EndIf
+
 				For $i = 0 To $numOfEvents - 1
 					$writingLine = _GUICtrlListView_GetItemText($eventList, $i, 1) & "|"
-					$writingLine = $writingLine & _GUICtrlListView_GetItemText($eventList, $i, 2) & "|"
-					$writingLine = $writingLine & _GUICtrlListView_GetItemText($eventList, $i, 3) & "|"
+					$writingLine = $writingLine & NumberToTimeString(TimeStringToNumber(_GUICtrlListView_GetItemText($eventList, $i, 2)) + $eventOffset) & "|"
+					$writingLine = $writingLine & NumberToTimeString(TimeStringToNumber(_GUICtrlListView_GetItemText($eventList, $i, 3)) + $eventOffset) & "|"
 					$writingLine = $writingLine & _GUICtrlListView_GetItemText($eventList, $i, 5)
 
 					FileWriteLine($writingFile, $writingLine)

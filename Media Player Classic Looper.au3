@@ -3,7 +3,7 @@
 #AutoIt3Wrapper_Outfile=F:\lelelelel\Programs\0A - AutoIt Programming Workfolder\MPC-HC Looper\Media Player Classic Looper.exe
 #AutoIt3Wrapper_Res_Comment=MPC-HC/MPC-BE Looper lets you create multiple sets of A/B points, giving MPC-HC/BE the ability to A/B loop.
 #AutoIt3Wrapper_Res_Description=MPC-HC/MPC-BE Looper by Zach Glenwright
-#AutoIt3Wrapper_Res_Fileversion=2021.3.20.7
+#AutoIt3Wrapper_Res_Fileversion=2021.3.25.15
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_LegalCopyright=© 2014-2021 Zach Glenwright
 #AutoIt3Wrapper_Res_Language=1033
@@ -78,6 +78,7 @@ Global $HotkeyList[34] = ["i", "o", "^i", "^o", "^x", "+l", "^t", "+o", "[", "]"
 Global $tryingToQuit = 0 ; Triggers if the Quit command has been called, to prevent it from being called more than once
 
 Global $MPCInitialized = 0 ; Whether or not MPC-HC is tied to this program
+Global $timeAdjustment = -1 ; Whether or not to adjust the time Looper reports (for both IN/OUT points and time display)
 
 Global $displayTimer = 0 ; The second the timer started, defaults to not on at all
 Global $displayMessage = 0 ; Whether we're looking at the current time or not
@@ -270,7 +271,7 @@ $listClearButton = GUICtrlCreateButton("Clear List", 364, 445, 63, 25) ; GUI Ele
 $vertLine = GUICtrlCreateGraphic(6, 473, 420, 1) ; GUI Element 45
 
 ; The name of the program - auto-generated for beta releases, uncomment to release a specific version!
-$progTitle = GUICtrlCreateLabel("MPC-HC/BE Looper [03-20-21 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
+$progTitle = GUICtrlCreateLabel("MPC-HC/BE Looper [03-25-21 RC]", 106, 481, 318, 19, $SS_RIGHT) ; GUI Element 46
 $progInfo = GUICtrlCreateLabel(Chr(169) & " 2014-21 Zach Glenwright [www.gullswingmedia.com]", 106, 495, 318, 19, $SS_RIGHT) ; GUI Element 47
 
 $optionsButton = GUICtrlCreateButton("", 8, 476, 40, 36, $BS_ICON) ; GUI Element 48
