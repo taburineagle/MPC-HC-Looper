@@ -39,7 +39,9 @@ Func loadEvent($selectedItem) ; load a selected item's IN, OUT and FILE from the
 
 		__MPC_send_message($ghnd_MPC_handle, $CMD_SETPOSITION, TimeStringToNumber(GUICtrlRead($inTF)) - ($timeAdjustment * 0.5)) ; seeks to the current IN point
 
-		setSpeed($speedSetting)
+		; Ask the INI file if we want to *not* change the speed on a file change
+		$resetSpeed = IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "dontForceSpeedReset", "0")
+		If $resetSpeed = 0 Then setSpeed($speedSetting)
 
 		If IniRead(@ScriptDir & "\MPCLooper.ini", "Prefs", "pausePlaybackOnLoadEvent", "0") = "1" Then
 			__MPC_send_message($ghnd_MPC_handle, $CMD_PAUSE, "") ; forces MPC-HC to pause after loading and cueing the event
